@@ -8,8 +8,8 @@ package org.MicroGridJade;
 public class StrategyControl {
     
     //Attributes 
-    public float pcc_upper=100;
-    public float pcc_lower=-100;
+    public float pcc_upper=1;
+    public float pcc_lower=-1;
     
     
     //Class method to control Peak Shaving
@@ -33,7 +33,7 @@ public class StrategyControl {
         //If power is beyond upper threshold means that demand overcome generation
         if (pcc_initial>pcc_upper){           
             //Batteries must provide energy
-            status=1;
+            status=2;
             threshold=0;
             p_diff=pcc_initial-pcc_upper;
             System.out.println("\np_diff = "+p_diff);
@@ -42,7 +42,7 @@ public class StrategyControl {
         //If power is below lower threshold means that generation overcome demand
         if(pcc_initial< pcc_lower){           
             //Batteries must absorb energy
-            status=2;
+            status=1;
             threshold=0;
             p_diff=pcc_initial-pcc_lower;//Take into account that pcc_initial (-) and pcc_lower(-), so p_diff=-200-(-100)=-100
         }
@@ -78,7 +78,7 @@ public class StrategyControl {
              
             }           
         }
-        float controlP[]={p_diff,status,threshold};
+        float controlP[]={p_diff+1,status,threshold};
         System.out.println("controlP[] = "+controlP[0] +" , "+ controlP[1]+" , "+controlP[2]+"\n");
         return controlP;    
 
@@ -90,8 +90,33 @@ public class StrategyControl {
         
     }
     //Class method to control Smoothing
-    public void Smoothing(){
-        
+    public float[] checkDepartmentPower(float loadDepartment, float solarDepartment){
+
+      float  p_hostelDepartmentLoad=loadDepartment;
+      float  p_hostelDepartmentGenerator=solarDepartment;
+
+      float p_savingDepartment;
+      int status=0;
+
+      p_savingDepartment=p_hostelDepartmentLoad-p_hostelDepartmentGenerator;
+
+
+      if(p_savingDepartment>0)
+      {
+           status=1;
+      }
+      else if(p_savingDepartment==0)
+      {
+          status=2;
+      }
+      else if(p_savingDepartment<0)
+      {
+          status=3;
+      }
+
+        float controlPDepartment[]={p_savingDepartment,status};
+
+      return controlPDepartment;
     }        
      
 }

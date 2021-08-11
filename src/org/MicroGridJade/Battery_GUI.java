@@ -9,7 +9,7 @@ import java.lang.*;
 
 public class Battery_GUI extends JFrame {
 
-    //protected ArrayList<Consumer> consumers = new ArrayList(); 
+    //protected ArrayList<LoadDepartment> consumers = new ArrayList();
     private Battery battery;
     private JTextField capacity;
     private JTextField nominal_p;

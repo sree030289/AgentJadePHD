@@ -23,7 +23,7 @@ public class Wind_Generator extends Agent{
 	private int i;
 	private float[] solarGeneratorValue;
 	private String[] solarGeneratorValue_Str;
-	Consumer2 load= new Consumer2();
+	LoadHostel load= new LoadHostel();
 	String p1_generated_Str;
 	double p1_generated_;
 	int j=0;

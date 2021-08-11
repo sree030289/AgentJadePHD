@@ -18,11 +18,11 @@ import java.text.DecimalFormat;
  *
  * @author sreeramvennapusa
  */
-public class SolarGenerator extends Agent{
+public class SolarGeneratorHostel extends Agent{
         String p_generated;
-        String price;
+      //  String price;
         String p1_generated;
-        String price1;
+        //String price1;
         private int i;
 	private float[] solarGeneratorValue;
 	private String[] solarGeneratorValue_Str;
@@ -43,7 +43,7 @@ public class SolarGenerator extends Agent{
 		solarGeneratorValue=new float[30];
 		solarGeneratorValue_Str=new String[30];
 
-		solarGeneratorValue[0]=100;
+		solarGeneratorValue[0]=150;
 		solarGeneratorValue[1]=330;
 		solarGeneratorValue[2]=90;
 		solarGeneratorValue[3]=110;
@@ -51,22 +51,22 @@ public class SolarGenerator extends Agent{
 		solarGeneratorValue[5]=0;
 		solarGeneratorValue[6]=99;
 		solarGeneratorValue[7]=180;
-//		solarGeneratorValue[8]=250;
-//		solarGeneratorValue[9]=400;
-//		solarGeneratorValue[10]=550;
-//		solarGeneratorValue[11]=600;
-//		solarGeneratorValue[12]=650;
-//		solarGeneratorValue[13]=650;
-//		solarGeneratorValue[14]=600;
-//		solarGeneratorValue[15]=500;
-//		solarGeneratorValue[16]=300;
-//		solarGeneratorValue[17]=0;
-//		solarGeneratorValue[18]=0;
-//		solarGeneratorValue[19]=0;
-//		solarGeneratorValue[20]=0;
-//		solarGeneratorValue[21]=0;
-//		solarGeneratorValue[22]=0;
-//		solarGeneratorValue[23]=0;
+		solarGeneratorValue[8]=250;
+		solarGeneratorValue[9]=400;
+		solarGeneratorValue[10]=550;
+		solarGeneratorValue[11]=600;
+		solarGeneratorValue[12]=650;
+		solarGeneratorValue[13]=650;
+		solarGeneratorValue[14]=600;
+		solarGeneratorValue[15]=500;
+		solarGeneratorValue[16]=300;
+		solarGeneratorValue[17]=0;
+		solarGeneratorValue[18]=0;
+		solarGeneratorValue[19]=0;
+		solarGeneratorValue[20]=0;
+		solarGeneratorValue[21]=0;
+		solarGeneratorValue[22]=0;
+		solarGeneratorValue[23]=0;
 
 
 		//It's convert demandValue to String
@@ -84,17 +84,17 @@ public class SolarGenerator extends Agent{
 //                p1_generada=p1_generada_Str.replaceAll(",", ".");
                 
                 //It's generated a random price with an upper threshold of 20(€/kW)
-                price1_=(float)(Math.random()*20)+1;
-                DecimalFormat price1_df = new DecimalFormat("0.00"); 
-                price1_Str=price1_df.format(price1_);
-                price1=price1_Str.replaceAll(",", ".");
+                //price1_=(float)(Math.random()*20)+1;
+                //DecimalFormat price1_df = new DecimalFormat("0.00");
+                //price1_Str=price1_df.format(price1_);
+                //price1=price1_Str.replaceAll(",", ".");
                 
 
 		// Register the book-selling service in the yellow pages
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("demand-generation");
+		sd.setType("demand-generationHostel");
 		sd.setName("demand-generation JADE");
 		dfd.addServices(sd);
 		try {
@@ -104,7 +104,7 @@ public class SolarGenerator extends Agent{
 			fe.printStackTrace();
 		}
                 System.out.println("Agent-Generator "+getAID().getName()+" delivery:");
-                System.out.println(p1_generated+"(kW) "+"inserted in DF. Price = "+price1+"\n");
+               // System.out.println(p1_generated+"(kW) "+"inserted in DF. Price = "+price1+"\n");
 
 		// Add the behaviour serving queries from Power Manager agent
 		addBehaviour(new DemandOfferServer());
@@ -145,12 +145,12 @@ public class SolarGenerator extends Agent{
 				p1_generated_Str=p1_generada_df.format(p1_generated_);
 				p1_generated=p1_generated_Str.replaceAll(",", ".");
 
-				System.out.println("Power from Generator: "+ p1_generated);
+				System.out.println("Power from Solar hostel Generator: "+ p1_generated);
 				p_generated=p1_generated;
-                price=price1;
+               // price=price1;
                                         
-				if (price != null) {
-					String propuesta="["+p_generated+","+price+"]";
+				if (p_generated != null) {
+					String propuesta="["+p_generated+"]";
 					respuesta.setPerformative(ACLMessage.PROPOSE);
 					respuesta.setContent(String.valueOf(propuesta));
 				}
@@ -189,7 +189,7 @@ public class SolarGenerator extends Agent{
 				ACLMessage response = msg.createReply();
 
 				//Integer price = (Integer) catalogo.remove(titulo);
-				if (price != null) {
+				if (p_generated != null) {
 					response.setPerformative(ACLMessage.INFORM);
                                         response.setContent(p_generated);
 					System.out.println(myAgent.getName()+" supply "+p_generated+"(kW) a agent "+msg.getSender().getName());

@@ -104,14 +104,14 @@ public class Battery extends Agent {
         
         // Register the battery service in the yellow pages
         DFAgentDescription dfd_batt = new DFAgentDescription();
-	dfd_batt.setName(getAID());
-	ServiceDescription sd_batt = new ServiceDescription();
-	sd_batt.setType("pcc-baterias");
-	sd_batt.setName("Cartera de inversión 2 JADE");
-	dfd_batt.addServices(sd_batt);
-	try {
+	    dfd_batt.setName(getAID());
+	    ServiceDescription sd_batt = new ServiceDescription();
+	    sd_batt.setType("pcc-baterias");
+	    sd_batt.setName("Cartera de inversión 2 JADE");
+	    dfd_batt.addServices(sd_batt);
+	    try {
             DFService.register(this, dfd_batt);
-	}
+	    }
         catch (FIPAException fe) {
             fe.printStackTrace();
         }
@@ -276,7 +276,7 @@ public class Battery extends Agent {
                     status_=results[1];
                     threshold_=results[2];
                     
-                    //PRUEBA UNITARIA
+                    //unit test
                     if(p_diff==221){
                         p_diff=221;
                     }
@@ -334,7 +334,8 @@ public class Battery extends Agent {
                                soc=Float.toString(soc_output);
                                 
                             }else{
-                                
+
+                                p_diff=-p_diff;
                                 if(p_diff>=p_nominal_){
                                     
                                     p_batt_output_=p_nominal_;
@@ -372,7 +373,7 @@ public class Battery extends Agent {
                                 soc=Float.toString(soc_output);
                                 
                             }else{
-                                p_diff=-p_diff;
+                                //p_diff=-p_diff;
                                 if(p_diff>=p_nominal_){
                                     p_batt_output_=p_nominal_;
                                     //soc_output=process.ChargingStatus(p_batt_output_,ti,soc_);

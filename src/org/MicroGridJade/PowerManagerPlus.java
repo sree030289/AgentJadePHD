@@ -11,8 +11,6 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 //Library to round decimals
 import java.text.DecimalFormat;
 
-/**@author endryys*/
-
 public class PowerManagerPlus extends Agent {
     
         //Arrays destinate to store information that describes the system's evolution
@@ -42,17 +40,20 @@ public class PowerManagerPlus extends Agent {
         private int a=0;// Auxiliary variable for storing the values ​​of the arrays
         
   	// The title of the book to buy
-	private String powerDemand_Str;
+	    private String powerDemand_Str;
         private float powerDemand;
         private String pm_name;
 
 	// The list of known seller agents
-	private AID[] AgentsGenerators;
+	    private AID[] AgentsGenerators;
         private AID[] AgentsBatteries;
         private AID[] AgentConsumers;
+
+        private AID[] AgentsSolarDepart;
+        private AID[] AgentsLoadDepart;
         private  int count=0;
         private ACLMessage demand_point=new ACLMessage();
-       // private Consumer consumer=new Consumer();
+       // private LoadDepartment consumer=new LoadDepartment();
         /*Attribute that must determine the seconds every when it sends a demand point, it is defined in 1800s
         Although this value must be taken from a textBox filled in by the user in a form*/
         public float ti=1800; 
@@ -70,12 +71,12 @@ public class PowerManagerPlus extends Agent {
 		// Printout a welcome message
 		System.out.println("Hi there! POWERMANAGER "+getAID().getName());
                 
-                //It's register and added the service to consumer's demand
+        //It's register and added the service to consumer's demand
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("demand-PM");
-		sd.setName("demand-PM JADE");
+		sd.setType("controlAgent-PM");
+		sd.setName("controlAgent JADE");
 		dfd.addServices(sd);
 		try {
 			DFService.register(this, dfd);
@@ -83,7 +84,7 @@ public class PowerManagerPlus extends Agent {
 		catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
-                addBehaviour(new IdentifyConsumers());
+                addBehaviour(new IdentifyLoads());
                
         }
 
@@ -94,18 +95,17 @@ public class PowerManagerPlus extends Agent {
 		System.out.println("Agent-Powermanager "+getAID().getName()+
                         " Terminated.");
 	}
-        private class IdentifyConsumers extends Behaviour{
+        private class IdentifyLoads extends Behaviour{
            
             DFAgentDescription[] consumers= new  DFAgentDescription[48];
              
             public void action(){
                 
                 int i=0;
-                //Se busca el consumidor para enviarselo
-		
+
                  DFAgentDescription template = new DFAgentDescription();
                  ServiceDescription sd = new ServiceDescription();
-                 sd.setType("confirmation-PM");
+                 sd.setType("LoadRequest-PM");
                  template.addServices(sd);
                             
                try {
@@ -146,46 +146,46 @@ public class PowerManagerPlus extends Agent {
         }
           
         private class ReceiveDemand extends CyclicBehaviour{
-            
+
             boolean fin=false;
             private MessageTemplate mt; // The template to receive replies
             private int j=0;
             private int i=0;
             public void action(){
-                
+
                 String pm_id= new String();
                 pm_id=myAgent.getName();
                 String[] a_pm_id=pm_id.split("@");
                 pm_name=a_pm_id[0];
-              
-                
+
+
                mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-                 
+
                demand_point = myAgent.receive(mt);
-                                
+
                 if (demand_point!=null){
-                    
+
                     mLoads[i][0]=demand_point.getSender().getName();
                     mLoads[i][1]=demand_point.getContent();
                     aidLoads[i]=demand_point.getSender();
                     powerDemand_Str = demand_point.getContent();
                     i++;
-                    
+
                     if(j>= AgentConsumers.length-1){
-                        
+
                         pDemand = pDemand +Float.parseFloat(powerDemand_Str);
                         powerDemand_Str=Float.toString(pDemand);
                         myAgent.addBehaviour(new GenerationBehaviour());
                         j=0;
                         i=0;
                         //d_point++;
-                        
+
                     }else{ //If it is less than the number of consumer agents
 
                         pDemand = pDemand +Float.parseFloat(powerDemand_Str);
                       j++;
                     }
-                    
+
                 }else{
                     block();//It's blocked until demand_point was different null
                 }
@@ -194,7 +194,7 @@ public class PowerManagerPlus extends Agent {
              
         }
         
-/*Behaviour that initialize the operation*/
+        /*Behaviour that initialize the operation*/
         private class GenerationBehaviour extends Behaviour{
             
             boolean fin=false;
@@ -209,7 +209,7 @@ public class PowerManagerPlus extends Agent {
 		sd.setType("demand-generation");
 		template.addServices(sd);
 		try {
-                    DFAgentDescription[] result = DFService.search(myAgent, template); 
+                    DFAgentDescription[] result = DFService.search(myAgent, template);
                     generators=result;
                     if(result.length>0){
                         System.out.println("The following generating agents are found:");
@@ -218,7 +218,7 @@ public class PowerManagerPlus extends Agent {
 				AgentsGenerators[i] = result[i].getName();
 				System.out.println(AgentsGenerators[i].getName());
                         }
-                        myAgent.addBehaviour(new SolicitudCompra());
+                        myAgent.addBehaviour(new PurchaseRequest());
                         }else{
                             System.out.println("Waiting for generators ... ");
                             block();
@@ -242,15 +242,14 @@ public class PowerManagerPlus extends Agent {
 	/**Inner class RequestPerformer.
 	   This is the behaviour used by Book-buyer agents to request seller 
 	   agents the target book.*/
-	private class SolicitudCompra extends Behaviour {
+	private class PurchaseRequest extends Behaviour {
             
-		private AID bestSeller; // The agent who provides the best offer 
+		        private AID bestSeller; // The agent who provides the best offer
                 private AID bestOption_batt;
-		private int bestPrice;  // The best offered price
-		private int repliesCnt = 0; // The counter of replies from seller agents
-		private MessageTemplate mt; // The template to receive replies
-		private int step = 0;
-                //private String p_generacion_
+		        private int bestPrice;  // The best offered price
+		        private int repliesCnt = 0; // The counter of replies from seller agents
+		        private MessageTemplate mt; // The template to receive replies
+		        private int step = 0;
                 private float powerGenerated;
                 private float powerBattery;//Variable global to accumulate battery power
 
@@ -282,7 +281,7 @@ public class PowerManagerPlus extends Agent {
                     int n_batt;
                     AID gen;
                     AID batt;
-                    AID[] generator_id,battery_id,consumer_id;
+                    AID[] generator_id,battery_id,consumer_id,department_id;
                     float p_generated,price;
                     float price_=0;
                     float priceS=0;
@@ -359,7 +358,7 @@ public class PowerManagerPlus extends Agent {
                                                     price_=price_+priceS;
                                                 }
                                                 float price_mean=price_/n;
-                                                System.out.println("The average price of the generated power is: "+price_mean);
+                                                //System.out.println("The average price of the generated power is: "+price_mean);
                                                 //Sources are classified according their power and prices
                                                 agentsG2=powerSelect.DataOrganizer(n, agentsG1, price_mean);
                                                 bestSeller=agentsG2[0].GetArrayAgent_AID();
@@ -372,7 +371,7 @@ public class PowerManagerPlus extends Agent {
 					if (repliesCnt >= AgentsGenerators.length) {
 						// We received all replies
 						step = 2;
-                                                break;
+						break;
 					}
 				}
 				else {
@@ -388,7 +387,7 @@ public class PowerManagerPlus extends Agent {
                                     System.out.println("agentsG2: "+agentsG2[i].GetArrayAgent_AID());
                                 }
                                 //It's compared the power generated of each generated with the power demanded
-                powerGenerada=0;
+                                powerGenerada=0;
                                 i=0;
                                 numOrderDemand=0;//Variable that show how many Demand's Order must be sent to satisfy demand
                                 powerDemand=Float.valueOf(powerDemand_Str);
@@ -471,6 +470,65 @@ public class PowerManagerPlus extends Agent {
                                 //***********************************************************************
                                 
                                 if(pcc_initial_!=0){
+
+//                                    //search for Solar Department generator supply and load department
+//
+//                                    DFAgentDescription template_department = new DFAgentDescription();
+//                                    ServiceDescription sd_depart = new ServiceDescription();
+//                                    sd_depart.setType("demand-generation-department");
+//                                    template_department.addServices(sd_depart);
+//                                    try {
+//                                        DFAgentDescription[] result_depart = DFService.search(myAgent, template_department);
+//                                        dfbatts=result_depart;
+//                                        if(result_depart.length>0){
+//                                            System.out.println("The following solar Generator systems are found:");
+//                                            AgentsSolarDepart = new AID[result_depart.length];
+//
+//                                            for (i = 0; i < result_depart.length; ++i) {
+//                                                AgentsSolarDepart[i] = result_depart[i].getName();
+//                                                System.out.println(AgentsSolarDepart[i].getName());
+//                                            }
+//                                        }else{
+//                                            System.out.println("Waiting for Solar department generator agent ...");
+//                                            block();
+//                                            myAgent.doWait(20000);
+//                                            break;
+//                                        }
+//                                    }catch(FIPAException fe){
+//                                        fe.printStackTrace();
+//                                    }
+//                                    //It's sent CFP to the batteries
+//
+//                                    //Previously to sent the CFP, it's necessary calculate parameters pdiff and status
+//                                    StrategyControl controlP=new StrategyControl();
+//                                    float [] department_input_=new float[3];
+//
+//                                    department_input_=controlP.checkDepartmentPower(pcc_initial_,pcc_initial_);
+//                                    p_diff=Float.toString(department_input_[0]);
+//                                    status=Float.toString(department_input_[1]);
+//                                    //threshold=Float.toString(batt_input_[2]);
+//
+//                                    batt_input="["+p_diff+","+status+"]";
+//
+//                                    ACLMessage cfp_depart = new ACLMessage(ACLMessage.CFP);
+//                                    for (i = 0; i < AgentsSolarDepart.length; ++i) {
+//                                        cfp_depart.addReceiver(AgentsSolarDepart[i]);
+//                                    }
+//                                    //p_generations=new int[AgentsGenerators.length];
+//                                    department_id=new AID[AgentsSolarDepart.length];
+//                                    cfp_depart.setContent(batt_input);
+//                                    cfp_depart.setConversationId("PM_BATT");
+//                                    cfp_depart.setReplyWith("cfp_batt"+System.currentTimeMillis()); // Unique value
+//                                    System.out.println("Power Manager sends CFP to the batteries with the message: "+cfp_depart.getContent());
+//                                    myAgent.send(cfp_depart);
+//
+//                                    //block();
+//
+//                                    // Prepare the template to get proposals
+//                                    mt = MessageTemplate.and(MessageTemplate.MatchConversationId("PM_BATT"),
+//                                            MessageTemplate.MatchInReplyTo(cfp_depart.getReplyWith()));
+//                                    step=5;
+
                                     //Search of batteries
                                     DFAgentDescription template_batt = new DFAgentDescription();
                                             ServiceDescription sd_batt = new ServiceDescription();
@@ -501,7 +559,7 @@ public class PowerManagerPlus extends Agent {
                                     //It's sent CFP to the batteries
                                 
                                     //Previously to sent the CFP, it's necessary calculate parameters pdiff and status
-                                    StrategyControl controlP=new StrategyControl();
+                                    StrategyControl  controlP=new StrategyControl();
                                     float [] batt_input_=new float[3];
        
                                     batt_input_=controlP.PeakShaving(pcc_initial_);
@@ -1135,7 +1193,7 @@ public class PowerManagerPlus extends Agent {
 		
                             DFAgentDescription template = new DFAgentDescription();
                             ServiceDescription sd = new ServiceDescription();
-                            sd.setType("confirmation-PM");
+                            sd.setType("LoadRequest-PM");
                             template.addServices(sd);
                             
                             try {

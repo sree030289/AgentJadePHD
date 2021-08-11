@@ -79,12 +79,12 @@ public class PowerSelector {
      }
 
      for(l=0;l<numAgents;++l){
-         System.out.println("The price of the price vector is analyzed["+l+"] ="+price[l]);
+         //System.out.println("The price of the price vector is analyzed["+l+"] ="+price[l]);
          price_upper=1.2*price_mean;
          if(price[l]>price_upper){
              discard++;
              
-             System.out.println("The  price ["+l+"]: "+price[l]+"It is too high. Exceeds the limit price: "+price_upper);
+            // System.out.println("The  price ["+l+"]: "+price[l]+"It is too high. Exceeds the limit price: "+price_upper);
              //It's saved in discard's array
              aid_d[e0]=aid[l];             
              price_d[e0]=price[l];
@@ -202,7 +202,7 @@ public class PowerSelector {
          
          System.out.println("agentsG2["+h+"]"+"AID :"+agentsG2[h].GetArrayAgent_AID());
          System.out.println("agentsG2["+h+"]"+"power :"+agentsG2[h].GetArrayAgent_p()+"W");
-         System.out.println("agentsG2["+h+"]"+"price :"+agentsG2[h].GetArrayAgent_p_price()+"inr");
+         //System.out.println("agentsG2["+h+"]"+"price :"+agentsG2[h].GetArrayAgent_p_price()+"inr");
      }
      return agentsG2;
     }

@@ -7,12 +7,37 @@ package org.MicroGridJade;
 
 /** @author endryys*/
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.opencsv.CSVWriter;
+
+import java.io.*;
+import java.util.Date;
 
 public class ExportCSV {
-    
+
+
+    public void CreateFinalCSVFile(String filepath,int hourOfDay,String pcc_final,String [] hostelDetails,String [] departmentdetails)
+    {
+        try {
+            FileWriter output = new FileWriter(filepath, true);
+            CSVWriter write = new CSVWriter(output);
+
+           if(hourOfDay==0) {
+
+               // Header column value
+               String[] header = {"Hour of the Day", "Hostel Load", "Hostel Generation", "Hostel Credit", "Hostel Debit", "Department Load", "Department Generation", "Department Credit", "Department Debit"};
+               write.writeNext(header);
+           }
+            // Value
+            String[] data1 = {hourOfDay+"",hostelDetails[0],hostelDetails[1],hostelDetails[2],hostelDetails[3],departmentdetails[0],departmentdetails[1],departmentdetails[2],departmentdetails[3]};
+            write.writeNext(data1);
+            write.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+
+        }
+    }
+
     public void CreatefileCSV(String filepath, String delim,String[] pcc_initial, String[] pcc_final, String[] p_batt ){
         
         final String NEXT_LINE = "\n";

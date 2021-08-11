@@ -9,10 +9,10 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-/**@author endryys*/
-public class Consumer2 extends Agent{
 
-//public Consumer consumer=this;
+public class LoadHostel extends Agent{
+
+//public LoadDepartment consumer=this;
 
 private float[] demandValue;
 private boolean end;
@@ -28,8 +28,8 @@ public float ti=1800;
         
         System.out.println("Welcome consumer "+this.getName()+".");
 
-        demandValue=new float[30];
-        demandValue_Str=new String[30];
+        demandValue=new float[24];
+        demandValue_Str=new String[24];
 
         demandValue[0]=150;
         demandValue[1]=180;
@@ -37,8 +37,8 @@ public float ti=1800;
         demandValue[3]=180;
         demandValue[4]=280;
         demandValue[5]=290;
-        demandValue[6]=400;
-        demandValue[7]=420;
+        demandValue[6]=300;
+        demandValue[7]=320;
         demandValue[8]=100;
         demandValue[9]=100;
         demandValue[10]=100;
@@ -66,8 +66,8 @@ public float ti=1800;
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
 	ServiceDescription sd = new ServiceDescription();
-	sd.setType("confirmation-PM");
-	sd.setName("confirmation-PM JADE");
+	sd.setType("LoadRequestHostel-PM");
+	sd.setName("LoadRequest-PM JADE");
 	dfd.addServices(sd);
 	try {
             DFService.register(this, dfd);
@@ -92,7 +92,7 @@ public float ti=1800;
             //Search the PM
             DFAgentDescription template = new DFAgentDescription();//DF template to generators		
             ServiceDescription sd = new ServiceDescription();  //Service description to generators                
-            sd.setType("demand-PM");
+            sd.setType("controlAgent-PM");
             template.addServices(sd);                             
 		
             try {
@@ -100,7 +100,7 @@ public float ti=1800;
                 result1=result;
                 if(result.length>0){
                     
-                    System.out.println("There are the following Power Managers:");
+                    System.out.println("There are the following Control Agent Power Managers:");
                     powerManager = new AID[result.length];
                     
                     for (int i = 0; i < result.length; ++i) {

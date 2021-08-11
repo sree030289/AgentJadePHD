@@ -86,39 +86,7 @@ public class BatteryAction extends Battery {
         p_batt_output=(((this.soc_max/soc)-1)*(e_capacity-e_available))/interval;
         return p_batt_output;
     }
-    
-    /*
-    //Moved to PowerSelector class
-    public float BatteryDecision(float aCD_,String name_batt,float p_batt,float soc_batt,float potenciaBaterias){
-        
-        float potenciaBaterias_=0;
-        
-        if(aCD_==1){
-            System.out.println(p_batt+"(kW) "+"consume "+name_batt+" mediante fase de carga automática.\n");
-            System.out.println(soc_batt+"(%) "+"queda "+name_batt+".\n");
-            //potenciaBaterias=potenciaBaterias+p_batt;
-            potenciaBaterias_=potenciaBaterias;
-        }
-        if(aCD_==-1){
-            System.out.println(p_batt+"(kW) "+"aporta "+name_batt+" mediante fase de descarga automática.\n");
-            System.out.println(soc_batt+"(%) "+"queda "+name_batt+".\n");
-            //potenciaBaterias=potenciaBaterias-p_batt;
-            potenciaBaterias_=potenciaBaterias;
-        }
-        if(aCD_==0){ 
-            //System.out.println(p_batt+"(kW) "+"consume "+name_batt);
-            //System.out.println(soc_batt+"(%) "+"queda "+name_batt+".\n");
-                                                    
-            if(p_batt==0){
-                //potenciaBaterias=potenciaBaterias+p_batt; 
-                potenciaBaterias_=potenciaBaterias;
-            }else{
-                //potenciaBaterias=potenciaBaterias+p_batt; 
-                potenciaBaterias_=potenciaBaterias;
-            }
-        }
-       return potenciaBaterias_;
-    }*/
+
     
     public float[] Battery_Information(float p_diff, float status_, float threshold_,float soc_, String agentBattery_name,float interval){
     
