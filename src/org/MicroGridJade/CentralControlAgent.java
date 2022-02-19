@@ -13,6 +13,8 @@ import jade.lang.acl.MessageTemplate;
 
 import java.text.DecimalFormat;
 
+import javax.sound.sampled.SourceDataLine;
+
 public class CentralControlAgent extends Agent  {
 
 
@@ -35,6 +37,10 @@ public class CentralControlAgent extends Agent  {
     float powerGenerated_department;
     float powerGenerated_Total=0;
 
+    float powerGenerated_hostel_wind;
+    float powerGenerated_department_wind;
+    float powerGenerated_hostel_solar;
+    float powerGenerated_department_solar;
 
     String hostelCredit_str="";
     String hostelDebit_str="";
@@ -242,18 +248,24 @@ public class CentralControlAgent extends Agent  {
                // generators=result;
                 if(result.length>0){
                     System.out.println("The following generating agents are found:");
-                    AgentsGenerators = new AID[result.length+1];
-                    for (int i = 0; i < result.length+1; ++i) {
-                        AgentsGenerators[i] = result[0].getName();
+                    AgentsGenerators = new AID[result.length+2];
+                    for (int i = 0; i < result.length; ++i) {
+                        AgentsGenerators[i] = result[i].getName();
                         System.out.println(AgentsGenerators[i].getName());
-                        if(AgentConsumers.length>1)
-                        {
-                            sd.setType("demand-generationDepartment");
-                            template.addServices(sd);
-                            result = DFService.search(myAgent, template);
-                            generatorsLength=2;
-                        }
                     }
+                    if(AgentConsumers.length>1)
+                    {
+                        sd.setType("demand-generationDepartment");
+                        template.addServices(sd);
+                        result = DFService.search(myAgent, template);
+                        generatorsLength=4;
+                    }
+                    for (int j = 2; j < result.length+2; ++j) {
+                        AgentsGenerators[j] = result[j-2].getName();
+                        System.out.println(AgentsGenerators[j].getName());
+                    
+                    }
+                    
                     myAgent.addBehaviour(new CentralControlAgent.PurchaseRequest());
                 }else{
                     System.out.println("Waiting for generators ... ");
@@ -284,13 +296,15 @@ public class CentralControlAgent extends Agent  {
         private int bestPrice;  // The best offered price
         private int repliesCnt = 0; // The counter of replies from seller agents
         private MessageTemplate mt;
-        private MessageTemplate mt1;// The template to receive replies
+        private MessageTemplate mt1;
+        private MessageTemplate mt2;
+        private MessageTemplate mt3;// The template to receive replies
         private int step = 0;
         private float powerGenerated;
         private float powerBattery;//Variable global to accumulate battery power
 
         private float pBatts=0;
-        private AgentFeatures [] agentsG1,agentsG2;
+        private AgentFeatures [] agentsG1,agentsG2,agentsG3,agentsG4;
         private AgentFeatures [] agentsB1,agentsB2;
         //private AgentFeatures [][] matrix2;
         private PowerSelector powerSelect= new PowerSelector();
@@ -355,6 +369,7 @@ public class CentralControlAgent extends Agent  {
                     break;
                 case 1:
                     // Receive all proposals/refusals from seller agents
+                    
                     ACLMessage reply = myAgent.receive(mt);
                     if (reply != null) {
                         System.out.println("Central control agent receives a proposal from: " + reply.getContent());
@@ -386,38 +401,56 @@ public class CentralControlAgent extends Agent  {
                             if (j < n) {
                                 if (gen.toString().contains("Hostel")) {
 
-                                    powerGenerated_hostel = p_generated;
-                                    AgentsGenerators[0]=gen;
+                                    powerGenerated_hostel = p_generated+powerGenerated_hostel;
+                                    if(gen.toString().contains("Wind"))
+                                    {
+                                        powerGenerated_hostel_wind=p_generated;
+                                        AgentsGenerators[1]=gen;
+                                    }
+                                    else{
+                                        powerGenerated_hostel_solar=p_generated;
+                                        AgentsGenerators[0]=gen;
+                                    }
 
 
                                 } else {
-                                    powerGenerated_department = p_generated;
-                                    AgentsGenerators[1]=gen;
+                                    powerGenerated_department = p_generated+powerGenerated_department;
+                                    
+                                    if(gen.toString().contains("Wind"))
+                                    {
+                                        powerGenerated_department_wind=p_generated;
+                                        AgentsGenerators[3]=gen;
+                                    }
+                                    else{
+                                        powerGenerated_department_solar=p_generated;
+                                        AgentsGenerators[2]=gen;
+                                    }
 
                                 }
+                                
                                 j++;
                             }
                             //When all sources have been storage
                             if (j == n) {
                                 powerGenerated_Total = powerGenerated_hostel + powerGenerated_department;
                                 if (powerDemand_hostel == powerGenerated_hostel) {
-                                    System.out.println("Total load requested in hostel is same as power generated from solar hostel --> " + "hostel Load Demand: " + powerDemand_hostel + " , hostel Solar generation: " + powerGenerated_hostel);
+                                    System.out.println("Total load requested in hostel is same as power generated from solar and wind hostel --> " + "hostel Load Demand: " + powerDemand_hostel + " , hostel solar and wind generation: " + powerGenerated_hostel);
                                 } else if (powerDemand_hostel > powerGenerated_hostel) {
-                                    System.out.println("Total load requested in hostel is greater than as power generated from solar hostel--> " + "hostel Load Demand: " + powerDemand_hostel + " , hostel Solar generation: " + powerGenerated_hostel);
+                                    System.out.println("Total load requested in hostel is greater than as power generated from solar and wind hostel generators--> " + "hostel Load Demand: " + powerDemand_hostel + " , hostel solar and wind generation: " + powerGenerated_hostel);
                                     System.out.println("\n check if department solar has surplus power generation \n ");
 
                                 } else if (powerDemand_hostel < powerGenerated_hostel) {
-                                    System.out.println("Total load requested in hostel is less than as power generated from solar hostel--> " + "hostel Load Demand: " + powerDemand_hostel + " , hostel Solar generation: " + powerGenerated_hostel);
+                                    System.out.println("Total load requested in hostel is less than as power generated from solar and wind hostel--> " + "hostel Load Demand: " + powerDemand_hostel + " , hostel solar and wind generation: " + powerGenerated_hostel);
                                     System.out.println("\n check if department load needs power or else store the power into battery where SOC% is lesser \n");
                                 }
                                 if (powerDemand_department == powerGenerated_department) {
-                                    System.out.println("Total load requested in department is same as power generated from solar department --> " + "department Load Demand: " + powerDemand_department + " , department Solar generation: " + powerGenerated_department);
+                                    System.out.println("Total load requested in department is same as power generated from solar and wind department --> " + "department Load Demand: " + powerDemand_department + " , department solar and wind generation: " + powerGenerated_department);
                                 } else if (powerDemand_department > powerGenerated_department) {
-                                    System.out.println("Total load requested in department is greater than as power generated from solar department--> " + "department Load Demand: " + powerDemand_department + " , department Solar generation: " + powerGenerated_department);
+                                    System.out.println("Total load requested in department is greater than as power generated from solar and wind department--> " + "department Load Demand: " + powerDemand_department + " , department solar and wind generation: " + powerGenerated_department);
                                     System.out.println("\n check if hostel solar has surplus power generation\n");
 
                                 } else if (powerDemand_department < powerGenerated_department) {
-                                    System.out.println("Total load requested in department is less than as power generated from solar department--> " + "department Load Demand: " + powerDemand_department + " , department Solar generation: " + powerGenerated_department);
+                                    System.out.println("Total load requested in department is less than as power generated from solar and wind department--> " + "department Load Demand: " + powerDemand_department + " , department solar and wind generation: " + powerGenerated_department);
                                     System.out.println("\n check if hostel load needs power or else store the power into battery where SOC% is lesser \n");
 
                                 }
@@ -465,10 +498,14 @@ public class CentralControlAgent extends Agent  {
 
                     StrategyControl p_threshold = new StrategyControl();
                     System.out.println("Hostel Load : " + powerDemand_hostel_Str);
-                    System.out.println("Hostel Solar Generation : " + powerGenerated_hostel);
+                    System.out.println("Hostel Solar + wind Generation : " + powerGenerated_hostel);
+                    System.out.println("Hostel Solar Generation : " + powerGenerated_hostel_solar);
+                    System.out.println("Hostel Wind Generation : " + powerGenerated_hostel_wind);
 
                     System.out.println("Department Load : " + powerDemand_department_Str);
-                    System.out.println("Department Solar Generation : " + powerGenerated_department);
+                    System.out.println("Department Solar + wind Generation : " + powerGenerated_department);
+                    System.out.println("Department Solar Generation : " + powerGenerated_department_solar);
+                    System.out.println("Department Wind Generation : " + powerGenerated_department_wind);
 
                     //It's compared the power generated of each generated with the power demanded
                     powerGenerada = 0;
@@ -478,7 +515,7 @@ public class CentralControlAgent extends Agent  {
 
                     numOrderDemand=AgentsGenerators.length;
 
-                    System.out.println(numOrderDemand);
+                    System.out.println("Total no of Generators: "+ numOrderDemand);
                     for(int p=0;p<numOrderDemand;p++) {
                         //ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                         bestSeller = AgentsGenerators[p];
@@ -486,6 +523,8 @@ public class CentralControlAgent extends Agent  {
                         System.out.println("Control Manager sends supply order to receiver" + bestSeller);
 
                         if (AgentsGenerators[p].toString().contains("Hostel")) {
+                            if(AgentsGenerators[p].toString().contains("Solar"))
+                            {
                             ACLMessage order1 = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                             order1.addReceiver(bestSeller);
                             order1.setContent(powerDemand_hostel_Str);
@@ -494,15 +533,39 @@ public class CentralControlAgent extends Agent  {
                             myAgent.send(order1);
                             mt = MessageTemplate.and(MessageTemplate.MatchConversationId("H_PM"),
                                     MessageTemplate.MatchInReplyTo(order1.getReplyWith()));
+                            }
+                            else{
+                                ACLMessage order1 = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                            order1.addReceiver(bestSeller);
+                            order1.setContent(powerDemand_hostel_Str);
+                            order1.setConversationId("H_WPM");
+                            order1.setReplyWith("Order1" + System.currentTimeMillis());
+                            myAgent.send(order1);
+                            mt1 = MessageTemplate.and(MessageTemplate.MatchConversationId("H_WPM"),
+                                    MessageTemplate.MatchInReplyTo(order1.getReplyWith()));
+                            }
                         } else {
+                            if(AgentsGenerators[p].toString().contains("Solar"))
+                            {
                             ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                             order.addReceiver(bestSeller);
                             order.setContent(powerDemand_department_Str);
                             order.setConversationId("D_PM");
                             order.setReplyWith("Order" + System.currentTimeMillis());
                             myAgent.send(order);
-                            mt1 = MessageTemplate.and(MessageTemplate.MatchConversationId("D_PM"),
+                            mt2 = MessageTemplate.and(MessageTemplate.MatchConversationId("D_PM"),
                                     MessageTemplate.MatchInReplyTo(order.getReplyWith()));
+                            }
+                            else{
+                                ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                            order.addReceiver(bestSeller);
+                            order.setContent(powerDemand_department_Str);
+                            order.setConversationId("D_WPM");
+                            order.setReplyWith("Order" + System.currentTimeMillis());
+                            myAgent.send(order);
+                            mt3 = MessageTemplate.and(MessageTemplate.MatchConversationId("D_WPM"),
+                                    MessageTemplate.MatchInReplyTo(order.getReplyWith()));
+                            }
                         }
 
 
@@ -517,14 +580,20 @@ public class CentralControlAgent extends Agent  {
                     // Receive the purchase order reply
                     myAgent.doWait(5000);
 
-                    ACLMessage  reply_mt1 =myAgent.receive(mt1);
+                    
                     ACLMessage reply_mt = myAgent.receive(mt);
+                    ACLMessage  reply_mt1 =myAgent.receive(mt1);
+                    ACLMessage  reply_mt2 =myAgent.receive(mt2);
+                    ACLMessage  reply_mt3 =myAgent.receive(mt3);
 
-                    if(reply_mt1==null || reply_mt==null)
+                    if(reply_mt1==null || reply_mt==null || reply_mt2 ==null||reply_mt3 ==null)
                     {
                         myAgent.doWait(3000);
-                        reply_mt1 =myAgent.receive(mt1);
+                        
                         reply_mt = myAgent.receive(mt);
+                        reply_mt1 =myAgent.receive(mt1);
+                        reply_mt2 =myAgent.receive(mt2);
+                        reply_mt3 =myAgent.receive(mt3);
 
                     }
 
@@ -556,6 +625,34 @@ public class CentralControlAgent extends Agent  {
                             }
 
                         }
+                        if (reply_mt2 != null) {
+                            // Purchase order reply received
+                            if (reply_mt2.getPerformative() == ACLMessage.INFORM) {
+                                // Purchase successful. We can terminate
+                                System.out.println(reply_mt2.getContent()+"(kW)"+" successfully supplied from agent "+reply_mt2.getSender().getName()+" a "+ myAgent.getName());
+                                // mt=mt1;
+                                step=4;
+                                repliesCnt++;
+                            }
+                            else {
+                                System.out.println("fault: the requested power is already supplied.");
+                            }
+
+                        }
+                        if (reply_mt3 != null) {
+                            // Purchase order reply received
+                            if (reply_mt3.getPerformative() == ACLMessage.INFORM) {
+                                // Purchase successful. We can terminate
+                                System.out.println(reply_mt3.getContent()+"(kW)"+" successfully supplied from agent "+reply_mt3.getSender().getName()+" a "+ myAgent.getName());
+                                // mt=mt1;
+                                step=4;
+                                repliesCnt++;
+                            }
+                            else {
+                                System.out.println("fault: the requested power is already supplied.");
+                            }
+
+                        }
                         else{
                             System.out.println("Can't find 2nd reply");
                             step=4;
@@ -566,7 +663,7 @@ public class CentralControlAgent extends Agent  {
                /*If the number of responses is equal to or greater than the number of registered generators
                 means that you have received all proposals from all generators
                  and you can move on to the next stage.*/
-                    if (repliesCnt >= AgentsGenerators.length) {
+                    //if (repliesCnt >= AgentsGenerators.length) {
                         // We received all replies
                         step = 4;
                         repliesCnt = 0;
@@ -593,7 +690,7 @@ public class CentralControlAgent extends Agent  {
                             hostelDebit_str = "hostelDebit:" + hostelDebit;
                         }
                         if (powerGenerated_department - powerDemand_department >= 0) {
-                            departmentCredit = powerGenerated_hostel - powerDemand_hostel;
+                            departmentCredit = powerGenerated_department - powerDemand_department;
                             System.out.println("Department is in Credit of : " + departmentCredit);
                             departmentCredit_str = "departmentCredit:" + departmentCredit;
                         } else {
@@ -607,6 +704,15 @@ public class CentralControlAgent extends Agent  {
 
                         String nums[] = new String[]{hostelCredit_str, hostelDebit_str, departmentCredit_str, departmentDebit_str};
 
+                        for (int k = 0; k < nums.length; k++) {
+                            if (!nums[k].isEmpty()) {
+                            float value = Float.parseFloat(nums[k].split(":")[1]);
+                            
+                            final_check=value+final_check;
+                            }
+                            System.out.println("final_check = "+final_check);
+
+                        }
                         for (int j = 0; j < nums.length; j++) {
 
                             if (!nums[j].isEmpty()) {
@@ -709,10 +815,10 @@ public class CentralControlAgent extends Agent  {
                         }
                         break;
 
-                    }else {
-                        block();
-                    }
-                    break;
+                    //}else {
+                       // block();
+                    //}
+                   // break;
                 case 4:
                     // Verify the hostel and department credit and Debit and get battery ready for it.
                     myAgent.doWait(3000);
@@ -1436,7 +1542,9 @@ public class CentralControlAgent extends Agent  {
                         myAgent.doDelete();
                     }
 
+
                     //Hour of the day, Hostel Load ,Hostel Solar, Hostel Battery,,Hostel Credit, HostelDebit, Department Load, Department Solar, Department Battery,Department Debit, Department Credit
+
 
                     System.out.println("In Step 10");
                     ExportCSV csv= new ExportCSV();
@@ -1444,8 +1552,14 @@ public class CentralControlAgent extends Agent  {
                     String [] HostelDetails={powerDemand_hostel_Str,powerGenerated_hostel+"",hostelCredit_str,hostelDebit_str};
                     String [] DepartmentDetails={powerDemand_department_Str,powerGenerated_department+"",departmentCredit_str,departmentDebit_str};
 
-                    csv.CreateFinalCSVFile("/Users/sreeramvennapusa/IdeaProjects/MultiAgentJadeProject/src/resource/finaloutput.csv",hourOfDay,pcc_final_Str,HostelDetails,DepartmentDetails);
+                    csv.CreateFinalCSVFile("/Users/sreeramvennapusa/Desktop/jade/AgentJadePHD/src/resource/finaloutput.csv",hourOfDay,pcc_final_Str,HostelDetails,DepartmentDetails);
                     hourOfDay++;
+                    powerGenerated_department=0;
+                    powerGenerated_hostel=0;
+                    powerGenerated_hostel_solar=0;
+                    powerGenerated_hostel_wind=0;
+                    powerGenerated_department_solar=0;
+                    powerGenerated_department_wind=0;
                     step= 11;
                     break;
             }

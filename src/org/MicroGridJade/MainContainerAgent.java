@@ -2,7 +2,6 @@ package org.MicroGridJade;
 
 
 import jade.core.Agent;
-import jade.core.AgentContainer;
 
 public class MainContainerAgent  extends Agent {
 
@@ -15,8 +14,8 @@ public class MainContainerAgent  extends Agent {
 
         jade.Boot.main(args1);
 
-        String [] args2 ={"-container","BatteryHostel:org.MicroGridJade.Battery;SolarHostel:org.MicroGridJade.SolarGeneratorHostel;LoadHostel:org.MicroGridJade.LoadHostel"};
-        String [] args3 ={"-container","BatteryDepartment:org.MicroGridJade.Battery;SolarDepartment:org.MicroGridJade.SolarGeneratorDepartment;LoadDepartment:org.MicroGridJade.LoadDepartment"};
+        String [] args2 ={"-container","BatteryHostel:org.MicroGridJade.Battery;SolarHostel:org.MicroGridJade.SolarGeneratorHostel;WindHostel:org.MicroGridJade.WindGeneratorHostel;LoadHostel:org.MicroGridJade.LoadHostel"};
+        String [] args3 ={"-container","BatteryDepartment:org.MicroGridJade.Battery;SolarDepartment:org.MicroGridJade.SolarGeneratorDepartment;WindDepartment:org.MicroGridJade.WindGeneratorDepartment;LoadDepartment:org.MicroGridJade.LoadDepartment"};
 
 
 
