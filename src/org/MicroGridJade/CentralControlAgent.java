@@ -57,6 +57,19 @@ public class CentralControlAgent extends Agent  {
     private AID[] AgentConsumers;
     private AID[] AgentsGenerators;
     private AID[] AgentsBatteries;
+
+    private float hostelbatteryInitialCapacity;
+    private float hostelbatteryCurrentCapacity;
+    private float hostelBatteryCurrentSOC;
+    private float hostelBatteryFinalSOC;
+
+    private float departmentbatteryInitialCapacity;
+    private float departmentbatteryCurrentCapacity;
+    private float departmentBatteryCurrentSOC;
+    private float departmentBatteryFinalSOC;
+
+    private String batteryAction="";
+
     private String[][] mLoads;
     private AID[] aidLoads;
 
@@ -923,6 +936,21 @@ public class CentralControlAgent extends Agent  {
                             soc_batt=results_batt[1];
                             aCD_=results_batt[2];
 
+                            if(reply_batt.getSender().getName().contains("Department"))
+                            {
+                                departmentbatteryCurrentCapacity=p_batt;
+                                departmentBatteryCurrentSOC=soc_batt;
+
+                                System.out.println("deparment battery: "+ departmentBatteryCurrentSOC );
+                            }
+                            else{
+                                hostelbatteryCurrentCapacity=p_batt;
+                                hostelBatteryCurrentSOC=soc_batt;
+
+                                System.out.println("hostel battery: "+ hostelBatteryCurrentSOC );
+
+                            }
+
                             if(aCD_==1){ aCD=1;}
                             if(aCD_==-1){ aCD=-1;}
                             if(aCD_==0){ aCD=0;}
@@ -942,13 +970,18 @@ public class CentralControlAgent extends Agent  {
                                     //When there is greater demand than generation
                                     agentsB2=powerSelect.DataOrganizer_batt_Descending(n_batt, agentsB1);
                                     bestOption_batt=agentsB2[0].GetArrayAgent_AID();
+                                    batteryAction="charge";
+                                    
                                 }
                                 if(final_check<0){
                                     //When there is a greater generation that demands
                                     agentsB2=powerSelect.DataOrganizer_batt_Ascending(n_batt, agentsB1);
                                     bestOption_batt=agentsB2[0].GetArrayAgent_AID();
+                                    batteryAction="discharge";
                                 }
                             }
+
+
                         }
                         if(k<n_batt){
                             step=5;
@@ -972,6 +1005,7 @@ public class CentralControlAgent extends Agent  {
                     StrategyControl controlP_batts=new StrategyControl();
                     for(i=0;i<n_batt;++i){
                         System.out.println("agentB2: "+agentsB2[i].GetArrayAgent_AID());
+                        
                     }
 //                    for(i=0;i<n_batt;++i){
 //                        System.out.println("agentB2: "+agentsB2[i].GetArrayAgent_AID());
@@ -1069,7 +1103,6 @@ public class CentralControlAgent extends Agent  {
                     float soc_pre=0;
                     String soc_pre_str=new String();
 
-                    //PRUEBA UNITARIA
                     if(powerDemand==1751){
                         powerDemand=1751;
                     }
@@ -1088,7 +1121,7 @@ public class CentralControlAgent extends Agent  {
                         if(reply_batt.getPerformative()==ACLMessage.INFORM){
 
                             numreplybatt++;
-                            //Tratamiento de la propuesta recibida
+                            //Treatment of the proposal received
                             batt_output = reply_batt.getContent();
                             String[] items_batt = batt_output.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
                             float[] results_batt = new float[items_batt.length];
@@ -1549,10 +1582,11 @@ public class CentralControlAgent extends Agent  {
                     System.out.println("In Step 10");
                     ExportCSV csv= new ExportCSV();
 
-                    String [] HostelDetails={powerDemand_hostel_Str,powerGenerated_hostel+"",hostelCredit_str,hostelDebit_str};
-                    String [] DepartmentDetails={powerDemand_department_Str,powerGenerated_department+"",departmentCredit_str,departmentDebit_str};
+                    String [] HostelDetails={powerDemand_hostel_Str,powerGenerated_hostel+"",powerGenerated_hostel_solar+"",powerGenerated_hostel_wind+"",hostelCredit_str,hostelDebit_str};
+                    String [] DepartmentDetails={powerDemand_department_Str,powerGenerated_department+"",powerGenerated_department_solar+"",powerGenerated_department_wind+"",departmentCredit_str,departmentDebit_str};
+                    String [] BatteryDetails={hostelBatteryCurrentSOC+"",departmentBatteryCurrentSOC+"",batteryAction};
 
-                    csv.CreateFinalCSVFile("/Users/sreeramvennapusa/Desktop/jade/AgentJadePHD/src/resource/finaloutput.csv",hourOfDay,pcc_final_Str,HostelDetails,DepartmentDetails);
+                    csv.CreateFinalCSVFile("/Users/sreeramvennapusa/Desktop/jade/AgentJadePHD/src/resource/finaloutput.csv",hourOfDay,pcc_final_Str,HostelDetails,DepartmentDetails,BatteryDetails,count);
                     hourOfDay++;
                     powerGenerated_department=0;
                     powerGenerated_hostel=0;
@@ -1561,11 +1595,25 @@ public class CentralControlAgent extends Agent  {
                     powerGenerated_department_solar=0;
                     powerGenerated_department_wind=0;
                     step= 11;
+
+                    
+
+                    System.out.println("*****************************************************************************\n");
+                    System.out.println("************************COMPLETED ---> "+count+" ROUNDS *********************\n");
+                    System.out.println("*****************************************************************************\n");
+
+                    try {
+                        Thread.sleep(30000);
+                        System.out.println("holding for 30 secs");
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                     break;
             }
 
         }
-
+        public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
         public boolean done() {
 
             return false;

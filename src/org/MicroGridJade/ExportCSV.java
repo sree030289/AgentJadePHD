@@ -15,20 +15,25 @@ import java.util.Date;
 public class ExportCSV {
 
 
-    public void CreateFinalCSVFile(String filepath,int hourOfDay,String pcc_final,String [] hostelDetails,String [] departmentdetails)
+    public void CreateFinalCSVFile(String filepath,int hourOfDay,String pcc_final,String [] hostelDetails,String [] departmentdetails,String [] Batterydetails, int count)
     {
         try {
-            FileWriter output = new FileWriter(filepath, true);
+            FileWriter output;
+            if(count==1){
+                output  = new FileWriter(filepath, false);
+            }
+             output = new FileWriter(filepath, true);
             CSVWriter write = new CSVWriter(output);
 
            if(hourOfDay==0) {
 
                // Header column value
-               String[] header = {"Hour of the Day", "Hostel Load", "Hostel Generation", "Hostel Credit", "Hostel Debit", "Department Load", "Department Generation", "Department Credit", "Department Debit"};
+               String[] header = {"Hour of the Day", "Hostel Load", "Hostel Generation","Solar hostel Generation","Wind hostel Generation", "Hostel Credit", "Hostel Debit", "H Battery SOC", "Department Load", "Department Generation","Solar Department Generation","Wind Department Generation", "Department Credit", "Department Debit","D battery SOC", "Battery Action"};
                write.writeNext(header);
            }
             // Value
-            String[] data1 = {hourOfDay+"",hostelDetails[0],hostelDetails[1],hostelDetails[2],hostelDetails[3],departmentdetails[0],departmentdetails[1],departmentdetails[2],departmentdetails[3]};
+            String[] data1 = {hourOfDay+"",hostelDetails[0],hostelDetails[1],hostelDetails[2],hostelDetails[3],hostelDetails[4],hostelDetails[5],Batterydetails[0],
+            departmentdetails[0],departmentdetails[1],departmentdetails[2],departmentdetails[3],departmentdetails[4],departmentdetails[5],Batterydetails[1],Batterydetails[2]};
             write.writeNext(data1);
             write.close();
         } catch (Exception e) {

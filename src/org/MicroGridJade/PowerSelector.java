@@ -207,7 +207,7 @@ public class PowerSelector {
      return agentsG2;
     }
     
-    public AgentFeatures[]DataOrganizer_batt_Ascending(int numBatts,AgentFeatures[] arrAgentFeatures){
+    public AgentFeatures[] DataOrganizer_batt_Ascending(int numBatts,AgentFeatures[] arrAgentFeatures){
         
      int arrange=0;
      int h=0;
