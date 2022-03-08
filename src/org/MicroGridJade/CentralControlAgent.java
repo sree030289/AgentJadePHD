@@ -92,6 +92,13 @@ public class CentralControlAgent extends Agent  {
     // Put agent initializations here
     protected void setup() {
 
+        System.out.println("Booting up control agent........");
+        try {
+            Thread.sleep(25000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         // Printout a welcome message
         System.out.println("Hi there! Central Control Agent  " + getAID().getName());
 
