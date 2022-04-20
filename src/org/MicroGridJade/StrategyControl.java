@@ -35,7 +35,7 @@ public class StrategyControl {
             //Batteries must provide energy
             status=2;
             threshold=0;
-            p_diff=pcc_initial-pcc_upper;
+            p_diff=pcc_initial;//-pcc_upper;
             System.out.println("\np_diff = "+p_diff);
         }
         
@@ -44,7 +44,7 @@ public class StrategyControl {
             //Batteries must absorb energy
             status=1;
             threshold=0;
-            p_diff=pcc_initial-pcc_lower;//Take into account that pcc_initial (-) and pcc_lower(-), so p_diff=-200-(-100)=-100
+            p_diff=pcc_initial;//-pcc_lower;//Take into account that pcc_initial (-) and pcc_lower(-), so p_diff=-200-(-100)=-100
         }
         /*If power is in range of thresholds, batteries can sent and absorb
         energy depending on their soc(%)*/
@@ -78,7 +78,7 @@ public class StrategyControl {
              
             }           
         }
-        float controlP[]={p_diff+1,status,threshold};
+        float controlP[]={p_diff,status,threshold};
         System.out.println("controlP[] = "+controlP[0] +" , "+ controlP[1]+" , "+controlP[2]+"\n");
         return controlP;    
 

@@ -6,7 +6,6 @@ import jade.core.Agent;
 public class MainContainerAgent  extends Agent {
 
 
-
     public static void main(String [] args)
     {
         String [] args1 ={"-gui"};

@@ -875,7 +875,7 @@ public class CentralControlAgent extends Agent  {
                             fe.printStackTrace();
                         }
 
-                        StrategyControl  controlP=new StrategyControl();
+                        StrategyControl controlP=new StrategyControl();
                         float [] batt_input_=new float[3];
 
                         batt_input_=controlP.PeakShaving(final_check);
@@ -1610,7 +1610,7 @@ public class CentralControlAgent extends Agent  {
                     System.out.println("*****************************************************************************\n");
 
                     try {
-                        Thread.sleep(30000);
+                        Thread.sleep(3000);
                         System.out.println("holding for 30 secs");
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block

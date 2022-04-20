@@ -24,12 +24,12 @@ public class Battery_GUI extends JFrame {
         
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(3, 2));
-	p.add(new JLabel("Capacity (kWh) :"));
+	p.add(new JLabel("Capacity (Wh) :"));
         capacity=new JTextField(20);
         p.add(capacity);
-        p.add(new JLabel("Nominal power (kW) :"));
-        nominal_p=new JTextField(20);
-        p.add(nominal_p);
+       // p.add(new JLabel("Nominal power (W) :"));
+        //nominal_p=new JTextField(20);
+        //p.add(nominal_p);
         p.add(new JLabel("Initial SOC (%) :"));
         soc=new JTextField(20);
         p.add(soc);
@@ -42,10 +42,10 @@ public class Battery_GUI extends JFrame {
 				try {
                                     
                                     String capacity_=capacity.getText().trim();
-                                    String nominal_p_=nominal_p.getText().trim();
+                                    //String nominal_p_=nominal_p.getText().trim();
                                     String soc_=soc.getText().trim();
                                     battery.capacity_gui=Float.parseFloat(capacity_);
-                                    battery.p_nominal_gui=Float.parseFloat(nominal_p_);
+                                   // battery.p_nominal_gui=Float.parseFloat(nominal_p_);
                                     battery.soc_gui=Float.parseFloat(soc_);
                                     battery.Battery_Inialize();
                                     dispose();

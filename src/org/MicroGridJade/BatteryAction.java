@@ -48,7 +48,7 @@ public class BatteryAction extends Battery {
         e_available=(this.soc_max-soc)*e_capacity/100;
         soc_output=(1+(e_charge/(e_capacity-e_available)))*soc;
         float margin=3/10;
-        soc_output=soc_output+ margin;
+        //soc_output=soc_output+ margin;
         return soc_output;
     }
     
@@ -61,7 +61,7 @@ public class BatteryAction extends Battery {
         e_capacity=this.capacity_*3600;
         e_available=(soc-this.soc_min)*e_capacity/100;
         soc_output=(1-(e_discharge/e_available))*soc;
-        soc_output=soc_output+1;
+        //soc_output=soc_output+1;
         return soc_output;
     }  
     
@@ -148,24 +148,24 @@ public class BatteryAction extends Battery {
                                 
                             }else{
                                 
-                                if(p_diff>=p_nominal_){
+                                // if(p_diff>=p_nominal_){
                                     
-                                    if(p_nominal_>=p_batt_max){
+                                //     if(p_nominal_>=p_batt_max){
                                         
-                                        p_batt_output_=p_batt_max;
-                                        batt_output[0]=p_batt_output_;
-                                        batt_output[1]=soc_;
-                                        batt_output[2]=aCD;
+                                //         p_batt_output_=p_batt_max;
+                                //         batt_output[0]=p_batt_output_;
+                                //         batt_output[1]=soc_;
+                                //         batt_output[2]=aCD;
                                         
-                                    }else{
+                                //     }else{
                                         
-                                        p_batt_output_=p_nominal_;
-                                        batt_output[0]=p_batt_output_;
-                                        batt_output[1]=soc_;
-                                        batt_output[2]=aCD;
-                                    }
+                                //         p_batt_output_=p_nominal_;
+                                //         batt_output[0]=p_batt_output_;
+                                //         batt_output[1]=soc_;
+                                //         batt_output[2]=aCD;
+                                //     }
                                     
-                                }else{//If p_diff is less than p_nominal
+                                // }else{//If p_diff is less than p_nominal
 
 
                                     if(p_batt_max<p_diff){
@@ -184,7 +184,7 @@ public class BatteryAction extends Battery {
                                     }
                                     
                                 }
-                            }
+                            //}
                             
                             break;
                             
@@ -206,24 +206,24 @@ public class BatteryAction extends Battery {
                                 
                                 p_diff=-p_diff;
 
-                                if(p_diff>=p_nominal_){
+                                // if(p_diff>=p_nominal_){
                                     
-                                    if(p_nominal_>=p_batt_max){
+                                //     if(p_nominal_>=p_batt_max){
                                         
-                                        p_batt_output_=p_batt_max;
-                                        batt_output[0]=p_batt_output_;
-                                        batt_output[1]=soc_;
-                                        batt_output[2]=aCD;
+                                //         p_batt_output_=p_batt_max;
+                                //         batt_output[0]=p_batt_output_;
+                                //         batt_output[1]=soc_;
+                                //         batt_output[2]=aCD;
                                         
-                                    }else{
+                                //     }else{
                                         
-                                        p_batt_output_=p_nominal_;
-                                        batt_output[0]=p_batt_output_;
-                                        batt_output[1]=soc_;
-                                        batt_output[2]=aCD;
-                                    }
+                                //         p_batt_output_=p_nominal_;
+                                //         batt_output[0]=p_batt_output_;
+                                //         batt_output[1]=soc_;
+                                //         batt_output[2]=aCD;
+                                //     }
                                  
-                                }else{ //Si p_diff es inferior a la p_nominal
+                                // }else{ //Si p_diff es inferior a la p_nominal
                                     
                                     if(p_batt_max<p_diff){
                                         
@@ -240,7 +240,7 @@ public class BatteryAction extends Battery {
                                         batt_output[2]=aCD;   
                                     }
                                 }
-                            }    
+                            //}    
                             
                             break;
                             

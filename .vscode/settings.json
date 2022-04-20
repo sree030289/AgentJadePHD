@@ -1,7 +1,0 @@
-{
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "jars/jade-4.5.0.jar",
-        "jars/opencsv-5.5.1.jar"
-    ]
-}

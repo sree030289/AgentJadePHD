@@ -1,7 +1,7 @@
 package org.MicroGridJade;
 import jade.core.AID;
 
-/**@author endryys*/
+
 
 public class PowerSelector {
     public int j, k,n;

@@ -336,18 +336,18 @@ public class Battery extends Agent {
                             }else{
 
                                 p_diff=-p_diff;
-                                if(p_diff>=p_nominal_){
-                                    
-                                    p_batt_output_=p_nominal_;
-                                    //soc_output=process.DischargingStatus(p_batt_output_,ti,soc_);
-                                     soc_output=batt_attr.DischargingStatus(p_batt_output_,ti,soc_);
-                                    if(soc_output<1.03*soc_min){
-                                        soc_output=soc_min;
-                                       // p_batt_output_=process.PowerDischargingTillSOCmin( ti, soc_);
-                                        p_batt_output_=batt_attr.PowerDischargingTillSOCmin( ti, soc_);
-                                    }
-                                    
-                                }else{
+//                                if(p_diff>=p_nominal_){
+//
+//                                    p_batt_output_=p_nominal_;
+//                                    //soc_output=process.DischargingStatus(p_batt_output_,ti,soc_);
+//                                     soc_output=batt_attr.DischargingStatus(p_batt_output_,ti,soc_);
+//                                    if(soc_output<1.03*soc_min){
+//                                        soc_output=soc_min;
+//                                       // p_batt_output_=process.PowerDischargingTillSOCmin( ti, soc_);
+//                                        p_batt_output_=batt_attr.PowerDischargingTillSOCmin( ti, soc_);
+//                                    }
+//
+//                                }else{
                                     p_batt_output_=p_diff;
                                     //soc_output=process.DischargingStatus(p_batt_output_,ti,soc_);
                                     soc_output=batt_attr.DischargingStatus(p_batt_output_,ti,soc_);
@@ -357,7 +357,7 @@ public class Battery extends Agent {
                                         p_batt_output_=batt_attr.PowerDischargingTillSOCmin( ti, soc_);
                                     }
                                 }
-                            }
+                            //}
                             
                             break;
                             
@@ -374,17 +374,17 @@ public class Battery extends Agent {
                                 
                             }else{
                                 //p_diff=-p_diff;
-                                if(p_diff>=p_nominal_){
-                                    p_batt_output_=p_nominal_;
-                                    //soc_output=process.ChargingStatus(p_batt_output_,ti,soc_);
-                                    soc_output=batt_attr.ChargingStatus(p_batt_output_,ti,soc_);
-                                    if(soc_output>1.03*soc_max){
-                                        soc_output=soc_max;
-                                        //p_batt_output_=process.PowerChargingTillSOCmax(ti,soc_);
-                                        p_batt_output_=batt_attr.PowerChargingTillSOCmax(ti,soc_);
-                                    }
-                                        
-                                }else{
+//                                if(p_diff>=p_nominal_){
+//                                    p_batt_output_=p_nominal_;
+//                                    //soc_output=process.ChargingStatus(p_batt_output_,ti,soc_);
+//                                    soc_output=batt_attr.ChargingStatus(p_batt_output_,ti,soc_);
+//                                    if(soc_output>1.03*soc_max){
+//                                        soc_output=soc_max;
+//                                        //p_batt_output_=process.PowerChargingTillSOCmax(ti,soc_);
+//                                        p_batt_output_=batt_attr.PowerChargingTillSOCmax(ti,soc_);
+//                                    }
+//                                        
+//                                }else{
                                     p_batt_output_=p_diff;
                                     //soc_output=process.ChargingStatus(p_batt_output_,ti, soc_);
                                     soc_output=batt_attr.ChargingStatus(p_batt_output_,ti, soc_);
@@ -394,7 +394,7 @@ public class Battery extends Agent {
                                         p_batt_output_=batt_attr.PowerChargingTillSOCmax(ti,soc_);
                                     }                                   
                                 }
-                            }    
+                           // }
                             
                             break;
                             
