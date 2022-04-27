@@ -1,0 +1,8 @@
+"Hour of the Day","Hostel Load","Hostel Generation","Solar hostel Generation","Wind hostel Generation","Hostel Credit","Hostel Debit","H Battery SOC","Department Load","Department Generation","Solar Department Generation","Wind Department Generation","Department Credit","Department Debit","D battery SOC","Battery Action"
+"0",,"100.0","0.0","100.0","hostelCredit:100.0","","55.0","100.0","80.0","0.0","80.0","","departmentDebit:-20.0","65.0","charge"
+"1","100.0","100.0","0.0","100.0","hostelCredit:0.0","","55.25731","100.0","60.0","0.0","60.0","","departmentDebit:-40.0","65.0","discharge"
+"2","100.0","100.0","0.0","100.0","hostelCredit:0.0","","55.25731","100.0","60.0","0.0","60.0","","departmentDebit:-40.0","64.84524","discharge"
+"3","100.0","120.0","0.0","120.0","hostelCredit:20.0","","55.25731","100.0","50.0","0.0","50.0","","departmentDebit:-50.0","64.690445","discharge"
+"4","100.0","40.0","0.0","40.0","","hostelDebit:-60.0","55.25731","200.0","60.0","0.0","60.0","","departmentDebit:-140.0","64.574326","discharge"
+"5","300.0","60.0","0.0","60.0","","hostelDebit:-240.0","55.25731","200.0","70.0","0.0","70.0","","departmentDebit:-130.0","63.80009","discharge"
+"6","400.0","130.0","50.0","80.0","","hostelDebit:-270.0","55.25731","300.0","150.0","50.0","100.0","","departmentDebit:-150.0","62.3663","discharge"
