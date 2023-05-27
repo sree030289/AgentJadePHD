@@ -13,8 +13,8 @@ public class MainContainerAgent  extends Agent {
 
         jade.Boot.main(args1);
 
-        String [] args2 ={"-container","BatteryHostel:org.MicroGridJade.Battery;SolarHostel:org.MicroGridJade.SolarGeneratorHostel;WindHostel:org.MicroGridJade.WindGeneratorHostel;LoadHostel:org.MicroGridJade.LoadHostel"};
-        String [] args3 ={"-container","BatteryDepartment:org.MicroGridJade.Battery;SolarDepartment:org.MicroGridJade.SolarGeneratorDepartment;WindDepartment:org.MicroGridJade.WindGeneratorDepartment;LoadDepartment:org.MicroGridJade.LoadDepartment"};
+        String [] args2 ={"-container","BatteryMicroGrid1:org.MicroGridJade.Battery;SolarMicroGrid1:org.MicroGridJade.SolarGeneratorMicroGrid1;WindMicroGrid1:org.MicroGridJade.WindGeneratorMicroGrid1;LoadMicroGrid1:org.MicroGridJade.LoadMicroGrid1"};
+        String [] args3 ={"-container","BatteryMicroGrid2:org.MicroGridJade.Battery;SolarMicroGrid2:org.MicroGridJade.SolarGeneratorMicroGrid2;WindMicroGrid2:org.MicroGridJade.WindGeneratorMicroGrid2;LoadMicroGrid2:org.MicroGridJade.LoadMicroGrid2"};
 
 
 

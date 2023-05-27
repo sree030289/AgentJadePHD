@@ -18,15 +18,15 @@ import java.text.DecimalFormat;
  *
  * @author sreeramvennapusa
  */
-public class SolarGeneratorHostel extends Agent{
+public class SolarGeneratorMicroGrid2 extends Agent{
         String p_generated;
-      //  String price;
+       // String price;
         String p1_generated;
         //String price1;
         private int i;
 	private float[] solarGeneratorValue;
 	private String[] solarGeneratorValue_Str;
-	LoadHostel load= new LoadHostel();
+	LoadMicroGrid1 load= new LoadMicroGrid1();
 	String p1_generated_Str;
 	double p1_generated_;
 	int j=0;
@@ -43,34 +43,34 @@ public class SolarGeneratorHostel extends Agent{
 		solarGeneratorValue=new float[30];
 		solarGeneratorValue_Str=new String[30];
 
-solarGeneratorValue[0]=0;
-solarGeneratorValue[1]=0;
-solarGeneratorValue[2]=0;
-solarGeneratorValue[3]=0;
-solarGeneratorValue[4]=0;
-solarGeneratorValue[5]=0;
-solarGeneratorValue[6]=50;
-solarGeneratorValue[7]=260;
-solarGeneratorValue[8]=460;
-solarGeneratorValue[9]=610;
-solarGeneratorValue[10]=700;
-solarGeneratorValue[11]=740;
-solarGeneratorValue[12]=730;
-solarGeneratorValue[13]=670;
-solarGeneratorValue[14]=550;
-solarGeneratorValue[15]=380;
-solarGeneratorValue[16]=170;
-solarGeneratorValue[17]=0;
-solarGeneratorValue[18]=0;
-solarGeneratorValue[19]=0;
-solarGeneratorValue[20]=0;
-solarGeneratorValue[21]=0;
-solarGeneratorValue[22]=0;
-solarGeneratorValue[23]=0;
+		solarGeneratorValue[0]=0;
+		solarGeneratorValue[1]=0;
+		solarGeneratorValue[2]=0;
+		solarGeneratorValue[3]=0;
+		solarGeneratorValue[4]=0;
+		solarGeneratorValue[5]=0;
+		solarGeneratorValue[6]=50;
+		solarGeneratorValue[7]=260;
+		solarGeneratorValue[8]=460;
+		solarGeneratorValue[9]=610;
+		solarGeneratorValue[10]=700;
+		solarGeneratorValue[11]=740;
+		solarGeneratorValue[12]=730;
+		solarGeneratorValue[13]=670;
+		solarGeneratorValue[14]=550;
+		solarGeneratorValue[15]=380;
+		solarGeneratorValue[16]=170;
+		solarGeneratorValue[17]=0;
+		solarGeneratorValue[18]=0;
+		solarGeneratorValue[19]=0;
+		solarGeneratorValue[20]=0;
+		solarGeneratorValue[21]=0;
+		solarGeneratorValue[22]=0;
+		solarGeneratorValue[23]=0;
 
-		// solarGeneratorValue[0]=40;
-		// solarGeneratorValue[1]=30;
-		// solarGeneratorValue[2]=10;
+		// solarGeneratorValue[0]=190;
+		// solarGeneratorValue[1]=70;
+		// solarGeneratorValue[2]=90;
 		// solarGeneratorValue[3]=110;
 		// solarGeneratorValue[4]=230;
 		// solarGeneratorValue[5]=0;
@@ -109,9 +109,9 @@ solarGeneratorValue[23]=0;
 //                p1_generada=p1_generada_Str.replaceAll(",", ".");
                 
                 //It's generated a random price with an upper threshold of 20(€/kW)
-                //price1_=(float)(Math.random()*20)+1;
+               // price1_=(float)(Math.random()*20)+1;
                 //DecimalFormat price1_df = new DecimalFormat("0.00");
-                //price1_Str=price1_df.format(price1_);
+               // price1_Str=price1_df.format(price1_);
                 //price1=price1_Str.replaceAll(",", ".");
                 
 
@@ -119,7 +119,7 @@ solarGeneratorValue[23]=0;
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("demand-generationHostel");
+		sd.setType("demand-generationMicroGrid2");
 		sd.setName("demand-generation JADE");
 		dfd.addServices(sd);
 		try {
@@ -170,7 +170,8 @@ solarGeneratorValue[23]=0;
 				p1_generated_Str=p1_generada_df.format(p1_generated_);
 				p1_generated=p1_generated_Str.replaceAll(",", ".");
 
-				System.out.println("Power from Solar hostel Generator: "+ p1_generated);
+				System.out.println("Power from Solar MicroGrid2 Generator: "+ p1_generated);
+
 				p_generated=p1_generated;
                // price=price1;
                                         

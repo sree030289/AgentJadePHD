@@ -90,33 +90,33 @@ public class StrategyControl {
         
     }
     //Class method to control Smoothing
-    public float[] checkDepartmentPower(float loadDepartment, float solarDepartment){
+    public float[] checkMicroGrid2Power(float loadMicroGrid2, float solarMicroGrid2){
 
-      float  p_hostelDepartmentLoad=loadDepartment;
-      float  p_hostelDepartmentGenerator=solarDepartment;
+      float  p_MicroGrid1MicroGrid2Load=loadMicroGrid2;
+      float  p_MicroGrid1MicroGrid2Generator=solarMicroGrid2;
 
-      float p_savingDepartment;
+      float p_savingMicroGrid2;
       int status=0;
 
-      p_savingDepartment=p_hostelDepartmentLoad-p_hostelDepartmentGenerator;
+      p_savingMicroGrid2=p_MicroGrid1MicroGrid2Load-p_MicroGrid1MicroGrid2Generator;
 
 
-      if(p_savingDepartment>0)
+      if(p_savingMicroGrid2>0)
       {
            status=1;
       }
-      else if(p_savingDepartment==0)
+      else if(p_savingMicroGrid2==0)
       {
           status=2;
       }
-      else if(p_savingDepartment<0)
+      else if(p_savingMicroGrid2<0)
       {
           status=3;
       }
 
-        float controlPDepartment[]={p_savingDepartment,status};
+        float controlPMicroGrid2[]={p_savingMicroGrid2,status};
 
-      return controlPDepartment;
+      return controlPMicroGrid2;
     }        
      
 }

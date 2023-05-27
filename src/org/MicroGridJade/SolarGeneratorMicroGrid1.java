@@ -18,14 +18,15 @@ import java.text.DecimalFormat;
  *
  * @author sreeramvennapusa
  */
-public class WindGeneratorHostel extends Agent{
+public class SolarGeneratorMicroGrid1 extends Agent{
         String p_generated;
       //  String price;
         String p1_generated;
         //String price1;
-	private float[] windGeneratorValue;
-	private String[] windGeneratorValue_Str;
-	LoadHostel load= new LoadHostel();
+        private int i;
+	private float[] solarGeneratorValue;
+	private String[] solarGeneratorValue_Str;
+	LoadMicroGrid1 load= new LoadMicroGrid1();
 	String p1_generated_Str;
 	double p1_generated_;
 	int j=0;
@@ -33,71 +34,76 @@ public class WindGeneratorHostel extends Agent{
 	protected void setup() {
 
 
+            String i_;
+           double p1_generada_;
+           double price1_;
+           String p1_generada_Str;
+           String price1_Str;
 		// Create the catalogue
-		windGeneratorValue=new float[30];
-		windGeneratorValue_Str=new String[30];
+		solarGeneratorValue=new float[30];
+		solarGeneratorValue_Str=new String[30];
 
-windGeneratorValue[0]=100;
-windGeneratorValue[1]=100;
-windGeneratorValue[2]=100;
-windGeneratorValue[3]=120;
-windGeneratorValue[4]=40;
-windGeneratorValue[5]=60;
-windGeneratorValue[6]=80;
-windGeneratorValue[7]=120;
-windGeneratorValue[8]=200;
-windGeneratorValue[9]=140;
-windGeneratorValue[10]=500;
-windGeneratorValue[11]=550;
-windGeneratorValue[12]=600;
-windGeneratorValue[13]=620;
-windGeneratorValue[14]=580;
-windGeneratorValue[15]=480;
-windGeneratorValue[16]=320;
-windGeneratorValue[17]=100;
-windGeneratorValue[18]=140;
-windGeneratorValue[19]=130;
-windGeneratorValue[20]=180;
-windGeneratorValue[21]=140;
-windGeneratorValue[22]=120;
-windGeneratorValue[23]=130;
+solarGeneratorValue[0]=0;
+solarGeneratorValue[1]=0;
+solarGeneratorValue[2]=0;
+solarGeneratorValue[3]=0;
+solarGeneratorValue[4]=0;
+solarGeneratorValue[5]=0;
+solarGeneratorValue[6]=50;
+solarGeneratorValue[7]=260;
+solarGeneratorValue[8]=460;
+solarGeneratorValue[9]=610;
+solarGeneratorValue[10]=700;
+solarGeneratorValue[11]=740;
+solarGeneratorValue[12]=730;
+solarGeneratorValue[13]=670;
+solarGeneratorValue[14]=550;
+solarGeneratorValue[15]=380;
+solarGeneratorValue[16]=170;
+solarGeneratorValue[17]=0;
+solarGeneratorValue[18]=0;
+solarGeneratorValue[19]=0;
+solarGeneratorValue[20]=0;
+solarGeneratorValue[21]=0;
+solarGeneratorValue[22]=0;
+solarGeneratorValue[23]=0;
 
-		// windGeneratorValue[0]=100;
-		// windGeneratorValue[1]=30;
-		// windGeneratorValue[2]=20;
-		// windGeneratorValue[3]=110;
-		// windGeneratorValue[4]=230;
-		// windGeneratorValue[5]=0;
-		// windGeneratorValue[6]=99;
-		// windGeneratorValue[7]=180;
-		// windGeneratorValue[8]=250;
-		// windGeneratorValue[9]=400;
-		// windGeneratorValue[10]=550;
-		// windGeneratorValue[11]=600;
-		// windGeneratorValue[12]=650;
-		// windGeneratorValue[13]=650;
-		// windGeneratorValue[14]=600;
-		// windGeneratorValue[15]=500;
-		// windGeneratorValue[16]=300;
-		// windGeneratorValue[17]=0;
-		// windGeneratorValue[18]=0;
-		// windGeneratorValue[19]=0;
-		// windGeneratorValue[20]=0;
-		// windGeneratorValue[21]=0;
-		// windGeneratorValue[22]=0;
-		// windGeneratorValue[23]=0;
+		// solarGeneratorValue[0]=40;
+		// solarGeneratorValue[1]=30;
+		// solarGeneratorValue[2]=10;
+		// solarGeneratorValue[3]=110;
+		// solarGeneratorValue[4]=230;
+		// solarGeneratorValue[5]=0;
+		// solarGeneratorValue[6]=99;
+		// solarGeneratorValue[7]=180;
+		// solarGeneratorValue[8]=250;
+		// solarGeneratorValue[9]=400;
+		// solarGeneratorValue[10]=550;
+		// solarGeneratorValue[11]=600;
+		// solarGeneratorValue[12]=650;
+		// solarGeneratorValue[13]=650;
+		// solarGeneratorValue[14]=600;
+		// solarGeneratorValue[15]=500;
+		// solarGeneratorValue[16]=300;
+		// solarGeneratorValue[17]=0;
+		// solarGeneratorValue[18]=0;
+		// solarGeneratorValue[19]=0;
+		// solarGeneratorValue[20]=0;
+		// solarGeneratorValue[21]=0;
+		// solarGeneratorValue[22]=0;
+		// solarGeneratorValue[23]=0;
 
 
 		//It's convert demandValue to String
-		for(int i=0; i<windGeneratorValue.length;i++){
-			windGeneratorValue_Str[i]=Float.toString(windGeneratorValue[i]);
+		for(int i=0; i<solarGeneratorValue.length;i++){
+			solarGeneratorValue_Str[i]=Float.toString(solarGeneratorValue[i]);
 		}
 
                 System.out.println("Welcome! Agent-Generator "+getAID().getName()+" It is read.");
                 //It's generated a random number of power with an upper threshold of 900(kW)
                 //p1_generada_=(float) (Math.random() * 900) + 1;
                 //p1_generada_=1430;
-//		        p1_generada_= Double.parseDouble(windGeneratorValue_Str[load.j]);
+//		        p1_generada_= Double.parseDouble(solarGeneratorValue_Str[load.j]);
 //                DecimalFormat p1_generada_df = new DecimalFormat("0.00");
 //                p1_generada_Str=p1_generada_df.format(p1_generada_);
 //                p1_generada=p1_generada_Str.replaceAll(",", ".");
@@ -113,7 +119,7 @@ windGeneratorValue[23]=130;
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("demand-generationHostel");
+		sd.setType("demand-generationMicroGrid1");
 		sd.setName("demand-generation JADE");
 		dfd.addServices(sd);
 		try {
@@ -122,7 +128,7 @@ windGeneratorValue[23]=130;
 		catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
-                System.out.println("Wind Hostel Agent-Generator "+getAID().getName()+" delivery:");
+                System.out.println("Agent-Generator "+getAID().getName()+" delivery:");
                // System.out.println(p1_generated+"(kW) "+"inserted in DF. Price = "+price1+"\n");
 
 		// Add the behaviour serving queries from Power Manager agent
@@ -156,14 +162,15 @@ windGeneratorValue[23]=130;
 			if (msg != null) {
 
 				// CFP Message received. Process it
+				String power = msg.getContent();
 				ACLMessage respuesta = msg.createReply();
 
-				p1_generated_= Double.parseDouble(windGeneratorValue_Str[j]);
+				p1_generated_= Double.parseDouble(solarGeneratorValue_Str[j]);
 				DecimalFormat p1_generada_df = new DecimalFormat("0.00");
 				p1_generated_Str=p1_generada_df.format(p1_generated_);
 				p1_generated=p1_generated_Str.replaceAll(",", ".");
 
-				System.out.println("Power from wind hostel Generator: "+ p1_generated);
+				System.out.println("Power from Solar MicroGrid1 Generator: "+ p1_generated);
 				p_generated=p1_generated;
                // price=price1;
                                         
@@ -201,7 +208,7 @@ windGeneratorValue[23]=130;
                         
 			if (msg != null) {
 				// ACCEPT_PROPOSAL Message received. Process it
-                                System.out.println("\nWind Hostel Generator "+myAgent.getName()+" has received ACCEPT_PROPORSAL.");
+                                System.out.println("\nGenerator "+myAgent.getName()+" has received ACCEPT_PROPORSAL.");
                                 System.out.println("\nSupply in progress ...");
 				String power = msg.getContent();
 				ACLMessage response = msg.createReply();
@@ -220,7 +227,7 @@ windGeneratorValue[23]=130;
                                 myAgent.send(response);
                                 if (response.getPerformative() == ACLMessage.INFORM){
                                     //myAgent.doDelete();
-                                    System.out.println("Wind Hostel Generator "+myAgent.getName()+" demand point has ended.\n");
+                                    System.out.println("Generator "+myAgent.getName()+" demand point has ended.\n");
                                 }
                                 if (response.getPerformative() == ACLMessage.FAILURE){
                                     System.out.println(power+"Has NOT been supplied to agent "+msg.getSender().getName());

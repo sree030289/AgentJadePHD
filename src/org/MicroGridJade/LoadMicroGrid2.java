@@ -9,13 +9,10 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import java.io.IOException;
-import java.util.*;
-
-public class LoadDepartment extends Agent{
+public class LoadMicroGrid2 extends Agent{
 
 
-//public LoadDepartment consumer=this;
+//public LoadMicroGrid2 consumer=this;
 
     private float[] demandValue;
     private boolean end;
@@ -69,7 +66,7 @@ public class LoadDepartment extends Agent{
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("LoadRequestDepartment-PM");
+        sd.setType("LoadRequestMicroGrid2-PM");
         sd.setName("LoadRequest-PM JADE");
         dfd.addServices(sd);
         try {
@@ -79,7 +76,7 @@ public class LoadDepartment extends Agent{
         }
 
 
-        addBehaviour(new LoadDepartment.SearchPM());
+        addBehaviour(new LoadMicroGrid2.SearchPM());
 
 
     }
@@ -111,7 +108,7 @@ public class LoadDepartment extends Agent{
                         powerManager[i] = result[i].getName();
                         System.out.println(powerManager[i].getName());
                     }
-                    myAgent.addBehaviour(new LoadDepartment.DemandRequest());
+                    myAgent.addBehaviour(new LoadMicroGrid2.DemandRequest());
                 }else{
                     System.out.println("Waiting for Control Agent ... ");
                     //myAgent.doSuspend();
@@ -165,7 +162,7 @@ public class LoadDepartment extends Agent{
             j++;
 
             if(j>0 && j<demandValue.length){
-                addBehaviour(new LoadDepartment.PM_Commit());
+                addBehaviour(new LoadMicroGrid2.PM_Commit());
             }
         }
 
@@ -190,7 +187,7 @@ public class LoadDepartment extends Agent{
 
                 if(j<demandValue.length){
 
-                    addBehaviour(new LoadDepartment.DemandRequest());
+                    addBehaviour(new LoadMicroGrid2.DemandRequest());
                 }
                 if(j>=demandValue.length){
                     // Define the type of message

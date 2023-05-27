@@ -15,7 +15,7 @@ import java.util.Date;
 public class ExportCSV {
 
 
-    public void CreateFinalCSVFile(String filepath,int hourOfDay,String pcc_final,String [] hostelDetails,String [] departmentdetails,String [] Batterydetails, int count)
+    public void CreateFinalCSVFile(String filepath,int hourOfDay,String pcc_final,String [] MicroGrid1Details,String [] MicroGrid2details,String [] Batterydetails, int count)
     {
         try {
             FileWriter output;
@@ -28,12 +28,12 @@ public class ExportCSV {
            if(hourOfDay==0) {
 
                // Header column value
-               String[] header = {"Hour of the Day", "Hostel Load", "Hostel Generation","Solar hostel Generation","Wind hostel Generation", "Hostel Credit", "Hostel Debit", "H Battery SOC", "Department Load", "Department Generation","Solar Department Generation","Wind Department Generation", "Department Credit", "Department Debit","D battery SOC", "Battery Action"};
+               String[] header = {"Hour of the Day", "MicroGrid1 Load", "MicroGrid1 Generation","Solar MicroGrid1 Generation","Wind MicroGrid1 Generation", "MicroGrid1 Credit", "MicroGrid1 Debit", "H Battery SOC", "MicroGrid2 Load", "MicroGrid2 Generation","Solar MicroGrid2 Generation","Wind MicroGrid2 Generation", "MicroGrid2 Credit", "MicroGrid2 Debit","D battery SOC", "Battery Action"};
                write.writeNext(header);
            }
             // Value
-            String[] data1 = {hourOfDay+"",hostelDetails[0],hostelDetails[1],hostelDetails[2],hostelDetails[3],hostelDetails[4],hostelDetails[5],Batterydetails[0],
-            departmentdetails[0],departmentdetails[1],departmentdetails[2],departmentdetails[3],departmentdetails[4],departmentdetails[5],Batterydetails[1],Batterydetails[2]};
+            String[] data1 = {hourOfDay+"",MicroGrid1Details[0],MicroGrid1Details[1],MicroGrid1Details[2],MicroGrid1Details[3],MicroGrid1Details[4],MicroGrid1Details[5],Batterydetails[0],
+            MicroGrid2details[0],MicroGrid2details[1],MicroGrid2details[2],MicroGrid2details[3],MicroGrid2details[4],MicroGrid2details[5],Batterydetails[1],Batterydetails[2]};
             write.writeNext(data1);
             write.close();
         } catch (Exception e) {

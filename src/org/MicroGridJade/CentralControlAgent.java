@@ -26,31 +26,31 @@ public class CentralControlAgent extends Agent  {
     private int a=0;// Auxiliary variable for storing the values ​​of the arrays
     private  int count=0;
 
-    String powerDemand_hostel_Str;
-    String powerDemand_department_Str;
+    String powerDemand_MicroGrid1_Str;
+    String powerDemand_MicroGrid2_Str;
 
-    float powerDemand_hostel;
-    float powerDemand_department;
+    float powerDemand_MicroGrid1;
+    float powerDemand_MicroGrid2;
 
 
-    float powerGenerated_hostel;
-    float powerGenerated_department;
+    float powerGenerated_MicroGrid1;
+    float powerGenerated_MicroGrid2;
     float powerGenerated_Total=0;
 
-    float powerGenerated_hostel_wind;
-    float powerGenerated_department_wind;
-    float powerGenerated_hostel_solar;
-    float powerGenerated_department_solar;
+    float powerGenerated_MicroGrid1_wind;
+    float powerGenerated_MicroGrid2_wind;
+    float powerGenerated_MicroGrid1_solar;
+    float powerGenerated_MicroGrid2_solar;
 
-    String hostelCredit_str="";
-    String hostelDebit_str="";
-    String departmentDebit_str="";
-    String departmentCredit_str="";
+    String MicroGrid1Credit_str="";
+    String MicroGrid1Debit_str="";
+    String MicroGrid2Debit_str="";
+    String MicroGrid2Credit_str="";
 
-    float hostelCredit=0;
-    float hostelDebit=0;
-    float departmentDebit=0;
-    float departmentCredit=0;
+    float MicroGrid1Credit=0;
+    float MicroGrid1Debit=0;
+    float MicroGrid2Debit=0;
+    float MicroGrid2Credit=0;
 
     float final_check=0;
     // The list of known generator agents
@@ -58,15 +58,15 @@ public class CentralControlAgent extends Agent  {
     private AID[] AgentsGenerators;
     private AID[] AgentsBatteries;
 
-    private float hostelbatteryInitialCapacity;
-    private float hostelbatteryCurrentCapacity;
-    private float hostelBatteryCurrentSOC;
-    private float hostelBatteryFinalSOC;
+    private float MicroGrid1batteryInitialCapacity;
+    private float MicroGrid1batteryCurrentCapacity;
+    private float MicroGrid1BatteryCurrentSOC;
+    private float MicroGrid1BatteryFinalSOC;
 
-    private float departmentbatteryInitialCapacity;
-    private float departmentbatteryCurrentCapacity;
-    private float departmentBatteryCurrentSOC;
-    private float departmentBatteryFinalSOC;
+    private float MicroGrid2batteryInitialCapacity;
+    private float MicroGrid2batteryCurrentCapacity;
+    private float MicroGrid2BatteryCurrentSOC;
+    private float MicroGrid2BatteryFinalSOC;
 
     private String batteryAction="";
 
@@ -134,7 +134,7 @@ public class CentralControlAgent extends Agent  {
             int count=0;
             DFAgentDescription template = new DFAgentDescription();
             ServiceDescription sd = new ServiceDescription();
-            sd.setType("LoadRequestHostel-PM");
+            sd.setType("LoadRequestMicroGrid1-PM");
             template.addServices(sd);
 
             try {
@@ -151,7 +151,7 @@ public class CentralControlAgent extends Agent  {
                         count=count+1;
                         if(count>0)
                         {
-                            sd.setType("LoadRequestDepartment-PM");
+                            sd.setType("LoadRequestMicroGrid2-PM");
                             template.addServices(sd);
                             result = DFService.search(myAgent, template);
                         }
@@ -213,15 +213,15 @@ public class CentralControlAgent extends Agent  {
                 powerDemand_Str = demand_point.getContent();
 
 
-                if(mLoads[0][i].contains("Hostel"))
+                if(mLoads[0][i].contains("MicroGrid1"))
                 {
-                    powerDemand_hostel_Str=demand_point.getContent();
-                    powerDemand_hostel=Float.parseFloat(powerDemand_hostel_Str);
+                    powerDemand_MicroGrid1_Str=demand_point.getContent();
+                    powerDemand_MicroGrid1=Float.parseFloat(powerDemand_MicroGrid1_Str);
                 }
                 else
                 {
-                    powerDemand_department_Str=demand_point.getContent();
-                    powerDemand_department=Float.parseFloat(powerDemand_department_Str);
+                    powerDemand_MicroGrid2_Str=demand_point.getContent();
+                    powerDemand_MicroGrid2=Float.parseFloat(powerDemand_MicroGrid2_Str);
                 }
                 i++;
 
@@ -260,7 +260,7 @@ public class CentralControlAgent extends Agent  {
             // Update the list of generators agents
             DFAgentDescription template = new DFAgentDescription();
             ServiceDescription sd = new ServiceDescription();
-            sd.setType("demand-generationHostel");
+            sd.setType("demand-generationMicroGrid1");
             template.addServices(sd);
 
             try {
@@ -275,7 +275,7 @@ public class CentralControlAgent extends Agent  {
                     }
                     if(AgentConsumers.length>1)
                     {
-                        sd.setType("demand-generationDepartment");
+                        sd.setType("demand-generationMicroGrid2");
                         template.addServices(sd);
                         result = DFService.search(myAgent, template);
                         generatorsLength=4;
@@ -350,7 +350,7 @@ public class CentralControlAgent extends Agent  {
             int n_batt;
             AID gen;
             AID batt;
-            AID[] generator_id, battery_id, consumer_id, department_id;
+            AID[] generator_id, battery_id, consumer_id, MicroGrid2_id;
             float p_generated, price;
             float price_ = 0;
             float priceS = 0;
@@ -419,30 +419,30 @@ public class CentralControlAgent extends Agent  {
 
                             //Sources are storage
                             if (j < n) {
-                                if (gen.toString().contains("Hostel")) {
+                                if (gen.toString().contains("MicroGrid1")) {
 
-                                    powerGenerated_hostel = p_generated+powerGenerated_hostel;
+                                    powerGenerated_MicroGrid1 = p_generated+powerGenerated_MicroGrid1;
                                     if(gen.toString().contains("Wind"))
                                     {
-                                        powerGenerated_hostel_wind=p_generated;
+                                        powerGenerated_MicroGrid1_wind=p_generated;
                                         AgentsGenerators[1]=gen;
                                     }
                                     else{
-                                        powerGenerated_hostel_solar=p_generated;
+                                        powerGenerated_MicroGrid1_solar=p_generated;
                                         AgentsGenerators[0]=gen;
                                     }
 
 
                                 } else {
-                                    powerGenerated_department = p_generated+powerGenerated_department;
+                                    powerGenerated_MicroGrid2 = p_generated+powerGenerated_MicroGrid2;
                                     
                                     if(gen.toString().contains("Wind"))
                                     {
-                                        powerGenerated_department_wind=p_generated;
+                                        powerGenerated_MicroGrid2_wind=p_generated;
                                         AgentsGenerators[3]=gen;
                                     }
                                     else{
-                                        powerGenerated_department_solar=p_generated;
+                                        powerGenerated_MicroGrid2_solar=p_generated;
                                         AgentsGenerators[2]=gen;
                                     }
 
@@ -452,26 +452,26 @@ public class CentralControlAgent extends Agent  {
                             }
                             //When all sources have been storage
                             if (j == n) {
-                                powerGenerated_Total = powerGenerated_hostel + powerGenerated_department;
-                                if (powerDemand_hostel == powerGenerated_hostel) {
-                                    System.out.println("Total load requested in hostel is same as power generated from solar and wind hostel --> " + "hostel Load Demand: " + powerDemand_hostel + " , hostel solar and wind generation: " + powerGenerated_hostel);
-                                } else if (powerDemand_hostel > powerGenerated_hostel) {
-                                    System.out.println("Total load requested in hostel is greater than as power generated from solar and wind hostel generators--> " + "hostel Load Demand: " + powerDemand_hostel + " , hostel solar and wind generation: " + powerGenerated_hostel);
-                                    System.out.println("\n check if department solar has surplus power generation \n ");
+                                powerGenerated_Total = powerGenerated_MicroGrid1 + powerGenerated_MicroGrid2;
+                                if (powerDemand_MicroGrid1 == powerGenerated_MicroGrid1) {
+                                    System.out.println("Total load requested in MicroGrid1 is same as power generated from solar and wind MicroGrid1 --> " + "MicroGrid1 Load Demand: " + powerDemand_MicroGrid1 + " , MicroGrid1 solar and wind generation: " + powerGenerated_MicroGrid1);
+                                } else if (powerDemand_MicroGrid1 > powerGenerated_MicroGrid1) {
+                                    System.out.println("Total load requested in MicroGrid1 is greater than as power generated from solar and wind MicroGrid1 generators--> " + "MicroGrid1 Load Demand: " + powerDemand_MicroGrid1 + " , MicroGrid1 solar and wind generation: " + powerGenerated_MicroGrid1);
+                                    System.out.println("\n check if MicroGrid2 solar has surplus power generation \n ");
 
-                                } else if (powerDemand_hostel < powerGenerated_hostel) {
-                                    System.out.println("Total load requested in hostel is less than as power generated from solar and wind hostel--> " + "hostel Load Demand: " + powerDemand_hostel + " , hostel solar and wind generation: " + powerGenerated_hostel);
-                                    System.out.println("\n check if department load needs power or else store the power into battery where SOC% is lesser \n");
+                                } else if (powerDemand_MicroGrid1 < powerGenerated_MicroGrid1) {
+                                    System.out.println("Total load requested in MicroGrid1 is less than as power generated from solar and wind MicroGrid1--> " + "MicroGrid1 Load Demand: " + powerDemand_MicroGrid1 + " , MicroGrid1 solar and wind generation: " + powerGenerated_MicroGrid1);
+                                    System.out.println("\n check if MicroGrid2 load needs power or else store the power into battery where SOC% is lesser \n");
                                 }
-                                if (powerDemand_department == powerGenerated_department) {
-                                    System.out.println("Total load requested in department is same as power generated from solar and wind department --> " + "department Load Demand: " + powerDemand_department + " , department solar and wind generation: " + powerGenerated_department);
-                                } else if (powerDemand_department > powerGenerated_department) {
-                                    System.out.println("Total load requested in department is greater than as power generated from solar and wind department--> " + "department Load Demand: " + powerDemand_department + " , department solar and wind generation: " + powerGenerated_department);
-                                    System.out.println("\n check if hostel solar has surplus power generation\n");
+                                if (powerDemand_MicroGrid2 == powerGenerated_MicroGrid2) {
+                                    System.out.println("Total load requested in MicroGrid2 is same as power generated from solar and wind MicroGrid2 --> " + "MicroGrid2 Load Demand: " + powerDemand_MicroGrid2 + " , MicroGrid2 solar and wind generation: " + powerGenerated_MicroGrid2);
+                                } else if (powerDemand_MicroGrid2 > powerGenerated_MicroGrid2) {
+                                    System.out.println("Total load requested in MicroGrid2 is greater than as power generated from solar and wind MicroGrid2--> " + "MicroGrid2 Load Demand: " + powerDemand_MicroGrid2 + " , MicroGrid2 solar and wind generation: " + powerGenerated_MicroGrid2);
+                                    System.out.println("\n check if MicroGrid1 solar has surplus power generation\n");
 
-                                } else if (powerDemand_department < powerGenerated_department) {
-                                    System.out.println("Total load requested in department is less than as power generated from solar and wind department--> " + "department Load Demand: " + powerDemand_department + " , department solar and wind generation: " + powerGenerated_department);
-                                    System.out.println("\n check if hostel load needs power or else store the power into battery where SOC% is lesser \n");
+                                } else if (powerDemand_MicroGrid2 < powerGenerated_MicroGrid2) {
+                                    System.out.println("Total load requested in MicroGrid2 is less than as power generated from solar and wind MicroGrid2--> " + "MicroGrid2 Load Demand: " + powerDemand_MicroGrid2 + " , MicroGrid2 solar and wind generation: " + powerGenerated_MicroGrid2);
+                                    System.out.println("\n check if MicroGrid1 load needs power or else store the power into battery where SOC% is lesser \n");
 
                                 }
                             }
@@ -517,15 +517,15 @@ public class CentralControlAgent extends Agent  {
                     // Send the purchase order to the Generators both
 
                     StrategyControl p_threshold = new StrategyControl();
-                    System.out.println("Hostel Load : " + powerDemand_hostel_Str);
-                    System.out.println("Hostel Solar + wind Generation : " + powerGenerated_hostel);
-                    System.out.println("Hostel Solar Generation : " + powerGenerated_hostel_solar);
-                    System.out.println("Hostel Wind Generation : " + powerGenerated_hostel_wind);
+                    System.out.println("MicroGrid1 Load : " + powerDemand_MicroGrid1_Str);
+                    System.out.println("MicroGrid1 Solar + wind Generation : " + powerGenerated_MicroGrid1);
+                    System.out.println("MicroGrid1 Solar Generation : " + powerGenerated_MicroGrid1_solar);
+                    System.out.println("MicroGrid1 Wind Generation : " + powerGenerated_MicroGrid1_wind);
 
-                    System.out.println("Department Load : " + powerDemand_department_Str);
-                    System.out.println("Department Solar + wind Generation : " + powerGenerated_department);
-                    System.out.println("Department Solar Generation : " + powerGenerated_department_solar);
-                    System.out.println("Department Wind Generation : " + powerGenerated_department_wind);
+                    System.out.println("MicroGrid2 Load : " + powerDemand_MicroGrid2_Str);
+                    System.out.println("MicroGrid2 Solar + wind Generation : " + powerGenerated_MicroGrid2);
+                    System.out.println("MicroGrid2 Solar Generation : " + powerGenerated_MicroGrid2_solar);
+                    System.out.println("MicroGrid2 Wind Generation : " + powerGenerated_MicroGrid2_wind);
 
                     //It's compared the power generated of each generated with the power demanded
                     powerGenerada = 0;
@@ -542,12 +542,12 @@ public class CentralControlAgent extends Agent  {
 
                         System.out.println("Control Manager sends supply order to receiver" + bestSeller);
 
-                        if (AgentsGenerators[p].toString().contains("Hostel")) {
+                        if (AgentsGenerators[p].toString().contains("MicroGrid1")) {
                             if(AgentsGenerators[p].toString().contains("Solar"))
                             {
                             ACLMessage order1 = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                             order1.addReceiver(bestSeller);
-                            order1.setContent(powerDemand_hostel_Str);
+                            order1.setContent(powerDemand_MicroGrid1_Str);
                             order1.setConversationId("H_PM");
                             order1.setReplyWith("Order1" + System.currentTimeMillis());
                             myAgent.send(order1);
@@ -557,7 +557,7 @@ public class CentralControlAgent extends Agent  {
                             else{
                                 ACLMessage order1 = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                             order1.addReceiver(bestSeller);
-                            order1.setContent(powerDemand_hostel_Str);
+                            order1.setContent(powerDemand_MicroGrid1_Str);
                             order1.setConversationId("H_WPM");
                             order1.setReplyWith("Order1" + System.currentTimeMillis());
                             myAgent.send(order1);
@@ -569,7 +569,7 @@ public class CentralControlAgent extends Agent  {
                             {
                             ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                             order.addReceiver(bestSeller);
-                            order.setContent(powerDemand_department_Str);
+                            order.setContent(powerDemand_MicroGrid2_Str);
                             order.setConversationId("D_PM");
                             order.setReplyWith("Order" + System.currentTimeMillis());
                             myAgent.send(order);
@@ -579,7 +579,7 @@ public class CentralControlAgent extends Agent  {
                             else{
                                 ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                             order.addReceiver(bestSeller);
-                            order.setContent(powerDemand_department_Str);
+                            order.setContent(powerDemand_MicroGrid2_Str);
                             order.setConversationId("D_WPM");
                             order.setReplyWith("Order" + System.currentTimeMillis());
                             myAgent.send(order);
@@ -688,41 +688,41 @@ public class CentralControlAgent extends Agent  {
                         step = 4;
                         repliesCnt = 0;
 
-                         hostelCredit_str="";
-                         hostelDebit_str="";
-                         departmentDebit_str="";
-                         departmentCredit_str="";
+                         MicroGrid1Credit_str="";
+                         MicroGrid1Debit_str="";
+                         MicroGrid2Debit_str="";
+                         MicroGrid2Credit_str="";
 
-                         hostelCredit=0;
-                         hostelDebit=0;
-                         departmentDebit=0;
-                         departmentCredit=0;
+                         MicroGrid1Credit=0;
+                         MicroGrid1Debit=0;
+                         MicroGrid2Debit=0;
+                         MicroGrid2Credit=0;
                          final_check =0;
 
                         //verify the total availability after supply is completed
-                        if (powerGenerated_hostel - powerDemand_hostel >= 0) {
-                            hostelCredit = powerGenerated_hostel - powerDemand_hostel;
-                            System.out.println("Hostel is in Credit of : " + hostelCredit);
-                            hostelCredit_str = "hostelCredit:" + hostelCredit;
+                        if (powerGenerated_MicroGrid1 - powerDemand_MicroGrid1 >= 0) {
+                            MicroGrid1Credit = powerGenerated_MicroGrid1 - powerDemand_MicroGrid1;
+                            System.out.println("MicroGrid1 is in Credit of : " + MicroGrid1Credit);
+                            MicroGrid1Credit_str = "MicroGrid1Credit:" + MicroGrid1Credit;
                         } else {
-                            hostelDebit = powerGenerated_hostel - powerDemand_hostel;
-                            System.out.println("Hostel is in Debit of : " + hostelDebit);
-                            hostelDebit_str = "hostelDebit:" + hostelDebit;
+                            MicroGrid1Debit = powerGenerated_MicroGrid1 - powerDemand_MicroGrid1;
+                            System.out.println("MicroGrid1 is in Debit of : " + MicroGrid1Debit);
+                            MicroGrid1Debit_str = "MicroGrid1Debit:" + MicroGrid1Debit;
                         }
-                        if (powerGenerated_department - powerDemand_department >= 0) {
-                            departmentCredit = powerGenerated_department - powerDemand_department;
-                            System.out.println("Department is in Credit of : " + departmentCredit);
-                            departmentCredit_str = "departmentCredit:" + departmentCredit;
+                        if (powerGenerated_MicroGrid2 - powerDemand_MicroGrid2 >= 0) {
+                            MicroGrid2Credit = powerGenerated_MicroGrid2 - powerDemand_MicroGrid2;
+                            System.out.println("MicroGrid2 is in Credit of : " + MicroGrid2Credit);
+                            MicroGrid2Credit_str = "MicroGrid2Credit:" + MicroGrid2Credit;
                         } else {
-                            departmentDebit = powerGenerated_department - powerDemand_department;
-                            System.out.println("Department is in Debit of : " + departmentDebit);
-                            departmentDebit_str = "departmentDebit:" + departmentDebit;
+                            MicroGrid2Debit = powerGenerated_MicroGrid2 - powerDemand_MicroGrid2;
+                            System.out.println("MicroGrid2 is in Debit of : " + MicroGrid2Debit);
+                            MicroGrid2Debit_str = "MicroGrid2Debit:" + MicroGrid2Debit;
 
                         }
 
-                        System.out.println(hostelCredit_str + "," + hostelDebit_str + "," + departmentCredit_str + "," + departmentDebit_str);
+                        System.out.println(MicroGrid1Credit_str + "," + MicroGrid1Debit_str + "," + MicroGrid2Credit_str + "," + MicroGrid2Debit_str);
 
-                        String nums[] = new String[]{hostelCredit_str, hostelDebit_str, departmentCredit_str, departmentDebit_str};
+                        String nums[] = new String[]{MicroGrid1Credit_str, MicroGrid1Debit_str, MicroGrid2Credit_str, MicroGrid2Debit_str};
 
                         for (int k = 0; k < nums.length; k++) {
                             if (!nums[k].isEmpty()) {
@@ -742,86 +742,86 @@ public class CentralControlAgent extends Agent  {
                                     System.out.println(name + ":" + value);
 
                                     if (name.contains("Credit")) {
-                                        if (name.contains("hostel")) {
+                                        if (name.contains("MicroGrid1")) {
 
-                                            System.out.println("Hostel is in Credit, So look if department has met load requirement");
-                                            if (departmentDebit < 0) {
-                                                System.out.println("Department is in Debit, so hostel Credit will go department load first before hostel battery");
-                                                 final_check = hostelCredit + departmentDebit;
+                                            System.out.println("MicroGrid1 is in Credit, So look if MicroGrid2 has met load requirement");
+                                            if (MicroGrid2Debit < 0) {
+                                                System.out.println("MicroGrid2 is in Debit, so MicroGrid1 Credit will go MicroGrid2 load first before MicroGrid1 battery");
+                                                 final_check = MicroGrid1Credit + MicroGrid2Debit;
 
 
                                                 if (final_check > 0) {
-                                                    System.out.println("Department debit :" + departmentDebit + " has been successfully supplied from hostel surpluss");
-                                                    System.out.println("Surpluss hostel generation will go into battery with less SOC in the grid");
+                                                    System.out.println("MicroGrid2 debit :" + MicroGrid2Debit + " has been successfully supplied from MicroGrid1 surpluss");
+                                                    System.out.println("Surpluss MicroGrid1 generation will go into battery with less SOC in the grid");
 
                                                 } else if (final_check < 0) {
-                                                    System.out.println(hostelCredit + "kw Of Department debit :" + departmentDebit + " is  successfully supplied from hostel surpluss and " + final_check + "is yet to be supplied and this will be taken from Department battery");
+                                                    System.out.println(MicroGrid1Credit + "kw Of MicroGrid2 debit :" + MicroGrid2Debit + " is  successfully supplied from MicroGrid1 surpluss and " + final_check + "is yet to be supplied and this will be taken from MicroGrid2 battery");
 
                                                 }
                                             } else {
-                                                System.out.println("Department is also in credit, so lets look into Battery SOC for both hostel and Department");
+                                                System.out.println("MicroGrid2 is also in credit, so lets look into Battery SOC for both MicroGrid1 and MicroGrid2");
                                             }
                                         } else {
-                                            System.out.println("Department is in Credit look of Hostel has met load rquirement");
-                                            if (hostelDebit < 0) {
-                                                System.out.println("Hostel is in Debit, so Department Credit will go Hostel load first before Department battery");
-                                                 final_check = departmentCredit + hostelDebit;
+                                            System.out.println("MicroGrid2 is in Credit look of MicroGrid1 has met load rquirement");
+                                            if (MicroGrid1Debit < 0) {
+                                                System.out.println("MicroGrid1 is in Debit, so MicroGrid2 Credit will go MicroGrid1 load first before MicroGrid2 battery");
+                                                 final_check = MicroGrid2Credit + MicroGrid1Debit;
 
 
                                                 if (final_check > 0) {
-                                                    System.out.println("Hostel debit :" + hostelDebit + " has been successfully supplied from Department surpluss");
-                                                    System.out.println("Surpluss Department generation will go into battery with less SOC in the grid");
+                                                    System.out.println("MicroGrid1 debit :" + MicroGrid1Debit + " has been successfully supplied from MicroGrid2 surpluss");
+                                                    System.out.println("Surpluss MicroGrid2 generation will go into battery with less SOC in the grid");
 
                                                 } else if (final_check < 0) {
-                                                    System.out.println(departmentCredit + "kw Of Hostel debit :" + hostelDebit + " is  successfully supplied from Department surpluss and " + final_check + "is yet to be supplied and this will be taken from Hostel battery");
+                                                    System.out.println(MicroGrid2Credit + "kw Of MicroGrid1 debit :" + MicroGrid1Debit + " is  successfully supplied from MicroGrid2 surpluss and " + final_check + "is yet to be supplied and this will be taken from MicroGrid1 battery");
 
                                                 }
 
                                             }
                                             else
-                                            { System.out.println("Hostel is also in credit, so lets look into Battery SOC for both hostel and Department");
-                                                final_check=hostelCredit+departmentCredit;
+                                            { System.out.println("MicroGrid1 is also in credit, so lets look into Battery SOC for both MicroGrid1 and MicroGrid2");
+                                                final_check=MicroGrid1Credit+MicroGrid2Credit;
 
                                             }
 
                                         }
                                     } else {
-                                        if (name.contains("hostel")) {
-                                            System.out.println("Hostel is in Debit, So look if department has surpluss generation");
-                                            if (departmentCredit > 0) {
-                                                System.out.println("Department Generation is in surpluss, so Department Credit will go Hostel load first before Department battery");
-                                                 final_check = hostelDebit + departmentCredit;
+                                        if (name.contains("MicroGrid1")) {
+                                            System.out.println("MicroGrid1 is in Debit, So look if MicroGrid2 has surpluss generation");
+                                            if (MicroGrid2Credit > 0) {
+                                                System.out.println("MicroGrid2 Generation is in surpluss, so MicroGrid2 Credit will go MicroGrid1 load first before MicroGrid2 battery");
+                                                 final_check = MicroGrid1Debit + MicroGrid2Credit;
 
 
                                                 if (final_check > 0) {
-                                                    System.out.println("Hostel debit :" + hostelDebit + " has been successfully supplied from Department surpluss");
-                                                    System.out.println("Surpluss Department generation will go into battery with less SOC in the grid");
+                                                    System.out.println("MicroGrid1 debit :" + MicroGrid1Debit + " has been successfully supplied from MicroGrid2 surpluss");
+                                                    System.out.println("Surpluss MicroGrid2 generation will go into battery with less SOC in the grid");
 
                                                 } else if (final_check < 0) {
-                                                    System.out.println(departmentCredit + "kw Of Hostel debit :" + hostelDebit + " is  successfully supplied from Department surpluss and " + final_check + "is yet to be supplied and this will be taken from Hostel battery");
+                                                    System.out.println(MicroGrid2Credit + "kw Of MicroGrid1 debit :" + MicroGrid1Debit + " is  successfully supplied from MicroGrid2 surpluss and " + final_check + "is yet to be supplied and this will be taken from MicroGrid1 battery");
 
                                                 }
-                                            } else if(departmentDebit<0) {
-                                                System.out.println("Department is also in debit, so lets look into Battery SOC for both hostel and Department");
+                                            } else if(MicroGrid2Debit<0) {
+                                                System.out.println("MicroGrid2 is also in debit, so lets look into Battery SOC for both MicroGrid1 and MicroGrid2");
                                             }
                                         } else {
 
-                                            System.out.println("Department is in Debit, So look if hostel has surpluss generation");
-                                            if (hostelCredit > 0) {
-                                                System.out.println("hostel Generation is in surpluss, so hostel Credit will go Department load first before hostel battery");
-                                                 final_check = hostelCredit + departmentDebit;
+                                            System.out.println("MicroGrid2 is in Debit, So look if MicroGrid1 has surpluss generation");
+                                            if (MicroGrid1Credit > 0) {
+                                                System.out.println("MicroGrid1 Generation is in surpluss, so MicroGrid1 Credit will go MicroGrid2 load first before MicroGrid1 battery");
+                                                 final_check = MicroGrid1Credit + MicroGrid2Debit;
 
                                                 if (final_check > 0) {
-                                                    System.out.println("Department debit :" + departmentDebit + " has been successfully supplied from Hostel surpluss");
-                                                    System.out.println("Surpluss hostel generation will go into battery with less SOC in the grid");
+                                                    System.out.println("MicroGrid2 debit :" + MicroGrid2Debit + " has been successfully supplied from MicroGrid1 surpluss");
+                                                    System.out.println("Surpluss MicroGrid1 generation will go into battery with less SOC in the grid");
 
                                                 } else if (final_check < 0) {
-                                                    System.out.println(hostelCredit + "kw Of Department debit :" + departmentDebit + " is  successfully supplied from hostel surpluss and " + final_check + "is yet to be supplied and this will be taken from Department battery");
+                                                    System.out.println(MicroGrid1Credit + "kw Of MicroGrid2 debit :" + MicroGrid2Debit + " is  successfully supplied from MicroGrid1 surpluss and " + final_check + "is yet to be supplied and this will be taken from MicroGrid2 battery");
 
                                                 }
-                                            } else if(hostelDebit<0) {
-                                                System.out.println("Hostel is also in debit, so lets look into Battery SOC for both hostel and Department");
-                                                final_check = hostelDebit + departmentDebit;
+                                            } else if(MicroGrid1Debit<0) {
+                                                System.out.println("MicroGrid1 is also in debit, so lets look into Battery SOC for both MicroGrid1 and MicroGrid2");
+                                                final_check = MicroGrid1Debit + MicroGrid2Debit;
 
                                             }
                                         }
@@ -840,11 +840,11 @@ public class CentralControlAgent extends Agent  {
                     //}
                    // break;
                 case 4:
-                    // Verify the hostel and department credit and Debit and get battery ready for it.
+                    // Verify the MicroGrid1 and MicroGrid2 credit and Debit and get battery ready for it.
                     myAgent.doWait(3000);
 
-//                    float battery_hostel_soc;
-//                    float battery_department_soc;
+//                    float battery_MicroGrid1_soc;
+//                    float battery_MicroGrid2_soc;
 
                     if(final_check!=0)
                     {
@@ -943,18 +943,18 @@ public class CentralControlAgent extends Agent  {
                             soc_batt=results_batt[1];
                             aCD_=results_batt[2];
 
-                            if(reply_batt.getSender().getName().contains("Department"))
+                            if(reply_batt.getSender().getName().contains("MicroGrid2"))
                             {
-                                departmentbatteryCurrentCapacity=p_batt;
-                                departmentBatteryCurrentSOC=soc_batt;
+                                MicroGrid2batteryCurrentCapacity=p_batt;
+                                MicroGrid2BatteryCurrentSOC=soc_batt;
 
-                                System.out.println("deparment battery: "+ departmentBatteryCurrentSOC );
+                                System.out.println("deparment battery: "+ MicroGrid2BatteryCurrentSOC );
                             }
                             else{
-                                hostelbatteryCurrentCapacity=p_batt;
-                                hostelBatteryCurrentSOC=soc_batt;
+                                MicroGrid1batteryCurrentCapacity=p_batt;
+                                MicroGrid1BatteryCurrentSOC=soc_batt;
 
-                                System.out.println("hostel battery: "+ hostelBatteryCurrentSOC );
+                                System.out.println("MicroGrid1 battery: "+ MicroGrid1BatteryCurrentSOC );
 
                             }
 
@@ -1583,24 +1583,24 @@ public class CentralControlAgent extends Agent  {
                     }
 
 
-                    //Hour of the day, Hostel Load ,Hostel Solar, Hostel Battery,,Hostel Credit, HostelDebit, Department Load, Department Solar, Department Battery,Department Debit, Department Credit
+                    //Hour of the day, MicroGrid1 Load ,MicroGrid1 Solar, MicroGrid1 Battery,,MicroGrid1 Credit, MicroGrid1Debit, MicroGrid2 Load, MicroGrid2 Solar, MicroGrid2 Battery,MicroGrid2 Debit, MicroGrid2 Credit
 
 
                     System.out.println("In Step 10");
                     ExportCSV csv= new ExportCSV();
 
-                    String [] HostelDetails={powerDemand_hostel_Str,powerGenerated_hostel+"",powerGenerated_hostel_solar+"",powerGenerated_hostel_wind+"",hostelCredit_str,hostelDebit_str};
-                    String [] DepartmentDetails={powerDemand_department_Str,powerGenerated_department+"",powerGenerated_department_solar+"",powerGenerated_department_wind+"",departmentCredit_str,departmentDebit_str};
-                    String [] BatteryDetails={hostelBatteryCurrentSOC+"",departmentBatteryCurrentSOC+"",batteryAction};
+                    String [] MicroGrid1Details={powerDemand_MicroGrid1_Str,powerGenerated_MicroGrid1+"",powerGenerated_MicroGrid1_solar+"",powerGenerated_MicroGrid1_wind+"",MicroGrid1Credit_str,MicroGrid1Debit_str};
+                    String [] MicroGrid2Details={powerDemand_MicroGrid2_Str,powerGenerated_MicroGrid2+"",powerGenerated_MicroGrid2_solar+"",powerGenerated_MicroGrid2_wind+"",MicroGrid2Credit_str,MicroGrid2Debit_str};
+                    String [] BatteryDetails={MicroGrid1BatteryCurrentSOC+"",MicroGrid2BatteryCurrentSOC+"",batteryAction};
 
-                    csv.CreateFinalCSVFile("/Users/sreeramvennapusa/Desktop/jade/AgentJadePHD/src/resource/finaloutput.csv",hourOfDay,pcc_final_Str,HostelDetails,DepartmentDetails,BatteryDetails,count);
+                    csv.CreateFinalCSVFile("/Users/sreeramvennapusa/Desktop/jade/AgentJadePHD/src/resource/finaloutput.csv",hourOfDay,pcc_final_Str,MicroGrid1Details,MicroGrid2Details,BatteryDetails,count);
                     hourOfDay++;
-                    powerGenerated_department=0;
-                    powerGenerated_hostel=0;
-                    powerGenerated_hostel_solar=0;
-                    powerGenerated_hostel_wind=0;
-                    powerGenerated_department_solar=0;
-                    powerGenerated_department_wind=0;
+                    powerGenerated_MicroGrid2=0;
+                    powerGenerated_MicroGrid1=0;
+                    powerGenerated_MicroGrid1_solar=0;
+                    powerGenerated_MicroGrid1_wind=0;
+                    powerGenerated_MicroGrid2_solar=0;
+                    powerGenerated_MicroGrid2_wind=0;
                     step= 11;
 
                     

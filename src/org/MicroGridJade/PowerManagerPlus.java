@@ -53,7 +53,7 @@ public class PowerManagerPlus extends Agent {
         private AID[] AgentsLoadDepart;
         private  int count=0;
         private ACLMessage demand_point=new ACLMessage();
-       // private LoadDepartment consumer=new LoadDepartment();
+       // private LoadMicroGrid2 consumer=new LoadMicroGrid2();
         /*Attribute that must determine the seconds every when it sends a demand point, it is defined in 1800s
         Although this value must be taken from a textBox filled in by the user in a form*/
         public float ti=1800; 
@@ -281,7 +281,7 @@ public class PowerManagerPlus extends Agent {
                     int n_batt;
                     AID gen;
                     AID batt;
-                    AID[] generator_id,battery_id,consumer_id,department_id;
+                    AID[] generator_id,battery_id,consumer_id,MicroGrid2_id;
                     float p_generated,price;
                     float price_=0;
                     float priceS=0;
@@ -471,14 +471,14 @@ public class PowerManagerPlus extends Agent {
                                 
                                 if(pcc_initial_!=0){
 
-//                                    //search for Solar Department generator supply and load department
+//                                    //search for Solar MicroGrid2 generator supply and load MicroGrid2
 //
-//                                    DFAgentDescription template_department = new DFAgentDescription();
+//                                    DFAgentDescription template_MicroGrid2 = new DFAgentDescription();
 //                                    ServiceDescription sd_depart = new ServiceDescription();
-//                                    sd_depart.setType("demand-generation-department");
-//                                    template_department.addServices(sd_depart);
+//                                    sd_depart.setType("demand-generation-MicroGrid2");
+//                                    template_MicroGrid2.addServices(sd_depart);
 //                                    try {
-//                                        DFAgentDescription[] result_depart = DFService.search(myAgent, template_department);
+//                                        DFAgentDescription[] result_depart = DFService.search(myAgent, template_MicroGrid2);
 //                                        dfbatts=result_depart;
 //                                        if(result_depart.length>0){
 //                                            System.out.println("The following solar Generator systems are found:");
@@ -489,7 +489,7 @@ public class PowerManagerPlus extends Agent {
 //                                                System.out.println(AgentsSolarDepart[i].getName());
 //                                            }
 //                                        }else{
-//                                            System.out.println("Waiting for Solar department generator agent ...");
+//                                            System.out.println("Waiting for Solar MicroGrid2 generator agent ...");
 //                                            block();
 //                                            myAgent.doWait(20000);
 //                                            break;
@@ -501,11 +501,11 @@ public class PowerManagerPlus extends Agent {
 //
 //                                    //Previously to sent the CFP, it's necessary calculate parameters pdiff and status
 //                                    StrategyControl controlP=new StrategyControl();
-//                                    float [] department_input_=new float[3];
+//                                    float [] MicroGrid2_input_=new float[3];
 //
-//                                    department_input_=controlP.checkDepartmentPower(pcc_initial_,pcc_initial_);
-//                                    p_diff=Float.toString(department_input_[0]);
-//                                    status=Float.toString(department_input_[1]);
+//                                    MicroGrid2_input_=controlP.checkMicroGrid2Power(pcc_initial_,pcc_initial_);
+//                                    p_diff=Float.toString(MicroGrid2_input_[0]);
+//                                    status=Float.toString(MicroGrid2_input_[1]);
 //                                    //threshold=Float.toString(batt_input_[2]);
 //
 //                                    batt_input="["+p_diff+","+status+"]";
@@ -515,7 +515,7 @@ public class PowerManagerPlus extends Agent {
 //                                        cfp_depart.addReceiver(AgentsSolarDepart[i]);
 //                                    }
 //                                    //p_generations=new int[AgentsGenerators.length];
-//                                    department_id=new AID[AgentsSolarDepart.length];
+//                                    MicroGrid2_id=new AID[AgentsSolarDepart.length];
 //                                    cfp_depart.setContent(batt_input);
 //                                    cfp_depart.setConversationId("PM_BATT");
 //                                    cfp_depart.setReplyWith("cfp_batt"+System.currentTimeMillis()); // Unique value

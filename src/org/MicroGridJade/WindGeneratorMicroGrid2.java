@@ -19,7 +19,7 @@ import java.text.DecimalFormat;
  * @author sreeramvennapusa
  */
 
-public class WindGeneratorDepartment extends Agent{
+public class WindGeneratorMicroGrid2 extends Agent{
         String p_generated;
        // String price;
         String p1_generated;
@@ -27,7 +27,7 @@ public class WindGeneratorDepartment extends Agent{
         private int i;
 	private float[] windGeneratorValue;
 	private String[] windGeneratorValue_Str;
-	LoadHostel load= new LoadHostel();
+	LoadMicroGrid1 load= new LoadMicroGrid1();
 	String p1_generated_Str;
 	double p1_generated_;
 	int j=0;
@@ -121,7 +121,7 @@ windGeneratorValue[23]=120;
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("demand-generationDepartment");
+		sd.setType("demand-generationMicroGrid2");
 		sd.setName("demand-generation JADE");
 		dfd.addServices(sd);
 		try {
@@ -130,7 +130,7 @@ windGeneratorValue[23]=120;
 		catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
-                System.out.println("Wind Department Agent-Generator "+getAID().getName()+" delivery:");
+                System.out.println("Wind MicroGrid2 Agent-Generator "+getAID().getName()+" delivery:");
                // System.out.println(p1_generated+"(kW) "+"inserted in DF. Price = "+price1+"\n");
 
 		// Add the behaviour serving queries from Power Manager agent
@@ -153,7 +153,7 @@ windGeneratorValue[23]=120;
 			fe.printStackTrace();
 		}
 
-		System.out.println(" Wind Department Agent-Generator "+getAID().getName()+" terminated.\n\n");
+		System.out.println(" Wind MicroGrid2 Agent-Generator "+getAID().getName()+" terminated.\n\n");
 	}
 
 	private class DemandOfferServer extends CyclicBehaviour {
@@ -172,7 +172,7 @@ windGeneratorValue[23]=120;
 				p1_generated_Str=p1_generada_df.format(p1_generated_);
 				p1_generated=p1_generated_Str.replaceAll(",", ".");
 
-				System.out.println("Power from wind department Generator: "+ p1_generated);
+				System.out.println("Power from wind MicroGrid2 Generator: "+ p1_generated);
 
 				p_generated=p1_generated;
                // price=price1;
@@ -211,7 +211,7 @@ windGeneratorValue[23]=120;
                         
 			if (msg != null) {
 				// ACCEPT_PROPOSAL Message received. Process it
-                                System.out.println("\nWind Department Generator "+myAgent.getName()+" has received ACCEPT_PROPORSAL.");
+                                System.out.println("\nWind MicroGrid2 Generator "+myAgent.getName()+" has received ACCEPT_PROPORSAL.");
                                 System.out.println("\nSupply in progress ...");
 				String power = msg.getContent();
 				ACLMessage response = msg.createReply();
@@ -230,7 +230,7 @@ windGeneratorValue[23]=120;
                                 myAgent.send(response);
                                 if (response.getPerformative() == ACLMessage.INFORM){
                                     //myAgent.doDelete();
-                                    System.out.println(" Wind Department Generator "+myAgent.getName()+" demand point has ended.\n");
+                                    System.out.println(" Wind MicroGrid2 Generator "+myAgent.getName()+" demand point has ended.\n");
                                 }
                                 if (response.getPerformative() == ACLMessage.FAILURE){
                                     System.out.println(power+"Has NOT been supplied to agent "+msg.getSender().getName());

@@ -10,9 +10,9 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 
-public class LoadHostel extends Agent{
+public class LoadMicroGrid1 extends Agent{
 
-//public LoadDepartment consumer=this;
+//public LoadMicroGrid2 consumer=this;
 
 private float[] demandValue;
 private boolean end;
@@ -66,7 +66,7 @@ public float ti=1800;
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
 	ServiceDescription sd = new ServiceDescription();
-	sd.setType("LoadRequestHostel-PM");
+	sd.setType("LoadRequestMicroGrid1-PM");
 	sd.setName("LoadRequest-PM JADE");
 	dfd.addServices(sd);
 	try {
